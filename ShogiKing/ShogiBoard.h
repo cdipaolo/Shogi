@@ -7,35 +7,34 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SpriteKit/SpriteKit.h"
+
+#define EMPTY 0
+
+#define PAWN 1
+#define LANCE 2
+#define SILVER 3
+#define GOLD 4
+#define KNIGHT 5
+#define BISHOP 6
+#define ROOK 7
+#define KING 8
+
+#define PAWNP 9
+#define LANCEP 10
+#define SILVERP 11
+#define KNIGHTP 12
+#define BISHOPP 13
+#define ROOKP 14
+
 
 @interface ShogiBoard : NSObject
 
-
-// players pieces bitboards
-@property (nonatomic) int64_t pawn;
-@property (nonatomic) int64_t knight;
-@property (nonatomic) int64_t lance;
-@property (nonatomic) int64_t silver;
-@property (nonatomic) int64_t gold;
-@property (nonatomic) int64_t king;
-@property (nonatomic) int64_t bishop;
-@property (nonatomic) int64_t rook;
-
-// enemy pieces bitboards
-@property (nonatomic) int64_t pawnE;
-@property (nonatomic) int64_t knightE;
-@property (nonatomic) int64_t lanceE;
-@property (nonatomic) int64_t silverE;
-@property (nonatomic) int64_t goldE;
-@property (nonatomic) int64_t kingE;
-@property (nonatomic) int64_t bishopE;
-@property (nonatomic) int64_t rookE;
-
-
-- (int64_t) bitboardFromArray:(NSArray*)array forPiece:(NSString* )piece;
-- (id) initWithArray: (NSArray*) pieces;
+// returns the correct macro'ed value for a piece. if index out of range returns ~0b0, which is a large number
+- (int) pieceAtRowI: (int) i ColumnJ: (int) j;
+- (SKSpriteNode* ) nodeFromPiece:(short)piece;
+- (id) initWithArray: (int[9][9]) pieces;
 - (id) init;
-+ (void) initialize;
 
 
 @end

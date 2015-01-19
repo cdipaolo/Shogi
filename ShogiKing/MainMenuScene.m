@@ -7,6 +7,7 @@
 //
 
 #import "MainMenuScene.h"
+#import "ShogiBoard.h"
 
 @implementation MainMenuScene
 
@@ -15,6 +16,9 @@
         SKSpriteNode* bg = [SKSpriteNode spriteNodeWithImageNamed:@"main"];
         bg.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
         [self addChild:bg];
+        
+        ShogiBoard* board = [[ShogiBoard alloc] init];
+        printf("%d",[board pieceAtRowI:0 ColumnJ:4]);
         
     }
     return self;
