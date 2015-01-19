@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6BEC88F21A6C8E9D0044C57F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC88F11A6C8E9D0044C57F /* main.m */; };
+		6BEC88F51A6C8E9D0044C57F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC88F41A6C8E9D0044C57F /* AppDelegate.m */; };
+		6BEC88F81A6C8E9D0044C57F /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC88F71A6C8E9D0044C57F /* GameScene.m */; };
+		6BEC88FA1A6C8E9D0044C57F /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6BEC88F91A6C8E9D0044C57F /* GameScene.sks */; };
+		6BEC88FD1A6C8E9D0044C57F /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC88FC1A6C8E9D0044C57F /* GameViewController.m */; };
+		6BEC89001A6C8E9D0044C57F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BEC88FE1A6C8E9D0044C57F /* Main.storyboard */; };
+		6BEC89021A6C8E9D0044C57F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BEC89011A6C8E9D0044C57F /* Images.xcassets */; };
+		6BEC89051A6C8E9D0044C57F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BEC89031A6C8E9D0044C57F /* LaunchScreen.xib */; };
+		6BEC89111A6C8E9D0044C57F /* ShogiKingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC89101A6C8E9D0044C57F /* ShogiKingTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6BEC890B1A6C8E9D0044C57F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6BEC88E41A6C8E9D0044C57F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6BEC88EB1A6C8E9D0044C57F;
+			remoteInfo = ShogiKing;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6BEC88EC1A6C8E9D0044C57F /* ShogiKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShogiKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BEC88F01A6C8E9D0044C57F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6BEC88F11A6C8E9D0044C57F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6BEC88F31A6C8E9D0044C57F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		6BEC88F41A6C8E9D0044C57F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		6BEC88F61A6C8E9D0044C57F /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		6BEC88F71A6C8E9D0044C57F /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
+		6BEC88F91A6C8E9D0044C57F /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		6BEC88FB1A6C8E9D0044C57F /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		6BEC88FC1A6C8E9D0044C57F /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		6BEC88FF1A6C8E9D0044C57F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6BEC89011A6C8E9D0044C57F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		6BEC89041A6C8E9D0044C57F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		6BEC890A1A6C8E9D0044C57F /* ShogiKingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShogiKingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BEC890F1A6C8E9D0044C57F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6BEC89101A6C8E9D0044C57F /* ShogiKingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShogiKingTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6BEC88E91A6C8E9D0044C57F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BEC89071A6C8E9D0044C57F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6BEC88E31A6C8E9D0044C57F = {
+			isa = PBXGroup;
+			children = (
+				6BEC88EE1A6C8E9D0044C57F /* ShogiKing */,
+				6BEC890D1A6C8E9D0044C57F /* ShogiKingTests */,
+				6BEC88ED1A6C8E9D0044C57F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6BEC88ED1A6C8E9D0044C57F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6BEC88EC1A6C8E9D0044C57F /* ShogiKing.app */,
+				6BEC890A1A6C8E9D0044C57F /* ShogiKingTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6BEC88EE1A6C8E9D0044C57F /* ShogiKing */ = {
+			isa = PBXGroup;
+			children = (
+				6BEC88F31A6C8E9D0044C57F /* AppDelegate.h */,
+				6BEC88F41A6C8E9D0044C57F /* AppDelegate.m */,
+				6BEC88F61A6C8E9D0044C57F /* GameScene.h */,
+				6BEC88F71A6C8E9D0044C57F /* GameScene.m */,
+				6BEC88F91A6C8E9D0044C57F /* GameScene.sks */,
+				6BEC88FB1A6C8E9D0044C57F /* GameViewController.h */,
+				6BEC88FC1A6C8E9D0044C57F /* GameViewController.m */,
+				6BEC88FE1A6C8E9D0044C57F /* Main.storyboard */,
+				6BEC89011A6C8E9D0044C57F /* Images.xcassets */,
+				6BEC89031A6C8E9D0044C57F /* LaunchScreen.xib */,
+				6BEC88EF1A6C8E9D0044C57F /* Supporting Files */,
+			);
+			path = ShogiKing;
+			sourceTree = "<group>";
+		};
+		6BEC88EF1A6C8E9D0044C57F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6BEC88F01A6C8E9D0044C57F /* Info.plist */,
+				6BEC88F11A6C8E9D0044C57F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6BEC890D1A6C8E9D0044C57F /* ShogiKingTests */ = {
+			isa = PBXGroup;
+			children = (
+				6BEC89101A6C8E9D0044C57F /* ShogiKingTests.m */,
+				6BEC890E1A6C8E9D0044C57F /* Supporting Files */,
+			);
+			path = ShogiKingTests;
+			sourceTree = "<group>";
+		};
+		6BEC890E1A6C8E9D0044C57F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6BEC890F1A6C8E9D0044C57F /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6BEC88EB1A6C8E9D0044C57F /* ShogiKing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6BEC89141A6C8E9D0044C57F /* Build configuration list for PBXNativeTarget "ShogiKing" */;
+			buildPhases = (
+				6BEC88E81A6C8E9D0044C57F /* Sources */,
+				6BEC88E91A6C8E9D0044C57F /* Frameworks */,
+				6BEC88EA1A6C8E9D0044C57F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShogiKing;
+			productName = ShogiKing;
+			productReference = 6BEC88EC1A6C8E9D0044C57F /* ShogiKing.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6BEC89091A6C8E9D0044C57F /* ShogiKingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6BEC89171A6C8E9D0044C57F /* Build configuration list for PBXNativeTarget "ShogiKingTests" */;
+			buildPhases = (
+				6BEC89061A6C8E9D0044C57F /* Sources */,
+				6BEC89071A6C8E9D0044C57F /* Frameworks */,
+				6BEC89081A6C8E9D0044C57F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6BEC890C1A6C8E9D0044C57F /* PBXTargetDependency */,
+			);
+			name = ShogiKingTests;
+			productName = ShogiKingTests;
+			productReference = 6BEC890A1A6C8E9D0044C57F /* ShogiKingTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6BEC88E41A6C8E9D0044C57F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Conner DiPaolo";
+				TargetAttributes = {
+					6BEC88EB1A6C8E9D0044C57F = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					6BEC89091A6C8E9D0044C57F = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 6BEC88EB1A6C8E9D0044C57F;
+					};
+				};
+			};
+			buildConfigurationList = 6BEC88E71A6C8E9D0044C57F /* Build configuration list for PBXProject "ShogiKing" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6BEC88E31A6C8E9D0044C57F;
+			productRefGroup = 6BEC88ED1A6C8E9D0044C57F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6BEC88EB1A6C8E9D0044C57F /* ShogiKing */,
+				6BEC89091A6C8E9D0044C57F /* ShogiKingTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6BEC88EA1A6C8E9D0044C57F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BEC89051A6C8E9D0044C57F /* LaunchScreen.xib in Resources */,
+				6BEC89021A6C8E9D0044C57F /* Images.xcassets in Resources */,
+				6BEC88FA1A6C8E9D0044C57F /* GameScene.sks in Resources */,
+				6BEC89001A6C8E9D0044C57F /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BEC89081A6C8E9D0044C57F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6BEC88E81A6C8E9D0044C57F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BEC88FD1A6C8E9D0044C57F /* GameViewController.m in Sources */,
+				6BEC88F51A6C8E9D0044C57F /* AppDelegate.m in Sources */,
+				6BEC88F81A6C8E9D0044C57F /* GameScene.m in Sources */,
+				6BEC88F21A6C8E9D0044C57F /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BEC89061A6C8E9D0044C57F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BEC89111A6C8E9D0044C57F /* ShogiKingTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6BEC890C1A6C8E9D0044C57F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6BEC88EB1A6C8E9D0044C57F /* ShogiKing */;
+			targetProxy = 6BEC890B1A6C8E9D0044C57F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6BEC88FE1A6C8E9D0044C57F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6BEC88FF1A6C8E9D0044C57F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6BEC89031A6C8E9D0044C57F /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6BEC89041A6C8E9D0044C57F /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6BEC89121A6C8E9D0044C57F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		6BEC89131A6C8E9D0044C57F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6BEC89151A6C8E9D0044C57F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ShogiKing/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		6BEC89161A6C8E9D0044C57F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ShogiKing/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		6BEC89181A6C8E9D0044C57F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ShogiKingTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShogiKing.app/ShogiKing";
+			};
+			name = Debug;
+		};
+		6BEC89191A6C8E9D0044C57F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ShogiKingTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShogiKing.app/ShogiKing";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6BEC88E71A6C8E9D0044C57F /* Build configuration list for PBXProject "ShogiKing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BEC89121A6C8E9D0044C57F /* Debug */,
+				6BEC89131A6C8E9D0044C57F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6BEC89141A6C8E9D0044C57F /* Build configuration list for PBXNativeTarget "ShogiKing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BEC89151A6C8E9D0044C57F /* Debug */,
+				6BEC89161A6C8E9D0044C57F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		6BEC89171A6C8E9D0044C57F /* Build configuration list for PBXNativeTarget "ShogiKingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BEC89181A6C8E9D0044C57F /* Debug */,
+				6BEC89191A6C8E9D0044C57F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6BEC88E41A6C8E9D0044C57F /* Project object */;
+}
