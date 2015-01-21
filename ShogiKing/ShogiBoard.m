@@ -17,7 +17,7 @@ const static int _defaultPieces[9][9] =  {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-G
                                     {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
                                     {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
                                     {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-                                    {PAWN, PAWN, EMPTY/*PAWN*/, PAWN, PAWN, PAWN, PAWN, PAWN, PAWN},
+                                    {PAWN, PAWN, PAWN, PAWN, PAWN, PAWN, PAWN, PAWN, PAWN},
                                     {EMPTY,BISHOP,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,ROOK,EMPTY},
                                     {LANCE,KNIGHT,SILVER,GOLD,KING,GOLD,SILVER,KNIGHT,LANCE}};
 
@@ -124,11 +124,11 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             }
             return moves.count > 0 ? moves : nil;
         
-        case BISHOP:
-            // check moves from top right
-            for (int i=iRow-1, j=jCol+1; i>-1 && j<9; --i, ++j){
-                int possibleMove = [self pieceAtRowI:i ColumnJ:j];
-                printf("Piece at <%d,%d> is %d\n",i,j,possibleMove);
+        case BISHOP:                                                        // x---x
+            // check moves from top right                                   // -x-x-
+            for (int i=iRow-1, j=jCol+1; i>-1 && j<9; --i, ++j){            // --o--
+                int possibleMove = [self pieceAtRowI:i ColumnJ:j];          // -x-x-
+                printf("Piece at <%d,%d> is %d\n",i,j,possibleMove);        // x---x
                 if (possibleMove < 1){
                     [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
                     printf("Move at (%d,%d) valid\n", i,j);
@@ -182,7 +182,278 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             }
             return moves.count > 0 ? moves : nil;
             
-        //ADD ROOK, KING, and all promoted pieces...
+        case ROOK:                                                          // --x--
+            // check from piece up                                          // --x--
+            for (int i=iRow-1; i > -1 ; --i ){                              // xxoxx
+                int possibleMove = [self pieceAtRowI:i ColumnJ:jCol];       // --x--
+                if (possibleMove < 1){                                      // --x--
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:jCol] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check from piece to down
+            for (int i=iRow+1; i < 9 ; ++i ){
+                int possibleMove = [self pieceAtRowI:i ColumnJ:jCol];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:jCol] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check from piece to left
+            for (int j = jCol-1; j > -1; ++j){
+                int possibleMove = [self pieceAtRowI:iRow ColumnJ:j];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:iRow] , [NSNumber numberWithInt:j] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check from piece to right
+            for (int j = jCol+1; j < 9; ++j){
+                int possibleMove = [self pieceAtRowI:iRow ColumnJ:j];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:iRow] , [NSNumber numberWithInt:j] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            return moves.count > 0 ? moves : nil;
+        
+        case KING:                                                                  // xxx
+            // loop through all pieces in the box- even checking the king itself    // xox
+            for (int i=iRow-1; i<iRow+2; ++i){                                      // xxx
+                for (int j=jCol-1; j<jCol+2; ++j){
+                    int possibleMove = [self pieceAtRowI:i ColumnJ:j];
+                    if (possibleMove < 1){
+                        [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
+                    }
+                }
+            }
+            return moves.count > 0 ? moves : nil;
+            
+        // now onwards to promoted pieces!! hazzah!
+        
+        case PAWNP:  // promoted pawn is a Gold Gen.
+            /* use same code as Gold General */                     // xxx
+            // iterate through top and middle in box of moves       // xox
+            for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
+                for (int j = jCol-1; j<jCol+2; ++j){
+                    int newPiece = [self pieceAtRowI:i ColumnJ:j];
+                    if ( newPiece < 1 ){
+                        [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
+                    }
+                }
+            }
+            // check the middle lower possible move
+            int bottomMiddlePiece = [self pieceAtRowI:iRow+1 ColumnJ:jCol];
+            if (bottomMiddlePiece < 1){
+                [moves addObject:@[ [NSNumber numberWithInt:iRow+1], [NSNumber numberWithInt:jCol] ]];
+            }
+            return moves.count > 0 ? moves : nil;
+        
+        case LANCEP:  // promoted lance is a Gold Gen.
+            /* use same code as Gold General */                     // xxx
+            // iterate through top and middle in box of moves       // xox
+            for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
+                for (int j = jCol-1; j<jCol+2; ++j){
+                    int newPiece = [self pieceAtRowI:i ColumnJ:j];
+                    if ( newPiece < 1 ){
+                        [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
+                    }
+                }
+            }
+            // check the middle lower possible move
+            int bottomMiddleMove = [self pieceAtRowI:iRow+1 ColumnJ:jCol];
+            if (bottomMiddleMove < 1){
+                [moves addObject:@[ [NSNumber numberWithInt:iRow+1], [NSNumber numberWithInt:jCol] ]];
+            }
+            return moves.count > 0 ? moves : nil;
+            
+        case SILVERP:  // promoted silver is a Gold Gen.
+            /* use same code as Gold General */                     // xxx
+            // iterate through top and middle in box of moves       // xox
+            for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
+                for (int j = jCol-1; j<jCol+2; ++j){
+                    int newPiece = [self pieceAtRowI:i ColumnJ:j];
+                    if ( newPiece < 1 ){
+                        [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
+                    }
+                }
+            }
+            // check the middle lower possible move
+            int lowerMiddlePiece = [self pieceAtRowI:iRow+1 ColumnJ:jCol];
+            if (lowerMiddlePiece < 1){
+                [moves addObject:@[ [NSNumber numberWithInt:iRow+1], [NSNumber numberWithInt:jCol] ]];
+            }
+            return moves.count > 0 ? moves : nil;
+            
+        case KNIGHTP:  // promoted knight is a Gold Gen.
+            /* use same code as Gold General */                     // xxx
+            // iterate through top and middle in box of moves       // xox
+            for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
+                for (int j = jCol-1; j<jCol+2; ++j){
+                    int newPiece = [self pieceAtRowI:i ColumnJ:j];
+                    if ( newPiece < 1 ){
+                        [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
+                    }
+                }
+            }
+            // check the middle lower possible move
+            int bottomMiddlePieceKnightP = [self pieceAtRowI:iRow+1 ColumnJ:jCol];
+            if (bottomMiddlePieceKnightP < 1){
+                [moves addObject:@[ [NSNumber numberWithInt:iRow+1], [NSNumber numberWithInt:jCol] ]];
+            }
+            return moves.count > 0 ? moves : nil;
+            
+        case BISHOPP:   // bishop += king-like box                          // x---x
+            // check moves from top right                                   // -xxx-
+            for (int i=iRow-2, j=jCol+2; i>-1 && j<9; --i, ++j){            // -xox-
+                int possibleMove = [self pieceAtRowI:i ColumnJ:j];          // -xxx-
+                printf("Piece at <%d,%d> is %d\n",i,j,possibleMove);        // x---x
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
+                    printf("Move at (%d,%d) valid\n", i,j);
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                printf("~Move at (%d,%d) NOT valid- breaking loop\n", i,j);
+                break;
+            }
+            // check moves from top left
+            for (int i=iRow-2, j=jCol-2; i>-1 && j>-1; --i, --j){
+                int possibleMove = [self pieceAtRowI:i ColumnJ:j];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check moves from bottom left
+            for (int i=iRow+2, j=jCol-2; i<9 && j>-1; ++i, --j){
+                int possibleMove = [self pieceAtRowI:i ColumnJ:j];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check moves from bottom right
+            for (int i=iRow+2, j=jCol+2; i<9 && j<9; ++i, ++j){
+                int possibleMove = [self pieceAtRowI:i ColumnJ:j];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check the box! using same code as king... so including the bishop which it'll pass over.
+            for (int i=iRow-1; i<iRow+2; ++i){
+                for (int j=jCol-1; j<jCol+2; ++j){
+                    int possibleMove = [self pieceAtRowI:i ColumnJ:j];
+                    if (possibleMove < 1){
+                        [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
+                    }
+                }
+            }
+            return moves.count > 0 ? moves : nil;
+
+        case ROOKP: // rook += king-like box                                // --x--
+            // check from piece up                                          // -xxx-
+            for (int i=iRow-2; i > -1 ; --i ){                              // xxoxx
+                int possibleMove = [self pieceAtRowI:i ColumnJ:jCol];       // -xxx-
+                if (possibleMove < 1){                                      // --x--
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:jCol] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check from piece to down
+            for (int i=iRow+2; i < 9 ; ++i ){
+                int possibleMove = [self pieceAtRowI:i ColumnJ:jCol];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:jCol] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check from piece to left
+            for (int j = jCol-2; j > -1; ++j){
+                int possibleMove = [self pieceAtRowI:iRow ColumnJ:j];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:iRow] , [NSNumber numberWithInt:j] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check from piece to right
+            for (int j = jCol+2; j < 9; ++j){
+                int possibleMove = [self pieceAtRowI:iRow ColumnJ:j];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:iRow] , [NSNumber numberWithInt:j] ]];
+                    if (possibleMove == 0){
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+            // check the box using same code as king... pass over bishop
+            for (int i=iRow-1; i<iRow+2; ++i){
+                for (int j=jCol-1; j<jCol+2; ++j){
+                    int possibleMove = [self pieceAtRowI:i ColumnJ:j];
+                    if (possibleMove < 1){
+                        [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
+                    }
+                }
+            }
+            
+            return moves.count > 0 ? moves : nil;
             
         default:
             return nil;
