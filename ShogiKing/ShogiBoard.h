@@ -30,8 +30,16 @@
 
 @interface ShogiBoard : NSObject
 
-// returns the correct macro'ed value for a piece. if index out of range returns ~0b0, which is a large number
+@property (nonatomic) NSDictionary* numberToLetter;
+@property (nonatomic) int** playerCaptures;
+@property (nonatomic) int** enemyCaptures;
+
+
+// returns the correct macro'ed value for a piece. if index out of range returns 255
 - (int) pieceAtRowI: (int) i ColumnJ: (int) j;
+- (int**) returnBoard;
+- (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol;
+- (NSArray*) possibleMovesOfPieceAtRow: (NSNumber*)row column: (NSNumber*) col;
 - (SKSpriteNode* ) nodeFromPiece:(short)piece;
 - (id) initWithArray: (int[9][9]) pieces;
 - (id) init;

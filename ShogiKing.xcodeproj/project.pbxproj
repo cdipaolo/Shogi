@@ -18,6 +18,7 @@
 		6BEC891F1A6C9C850044C57F /* OnePlayerScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC891E1A6C9C850044C57F /* OnePlayerScene.m */; };
 		6BEC89251A6C9CD20044C57F /* TwoPlayerScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC89241A6C9CD20044C57F /* TwoPlayerScene.m */; };
 		6BEC89281A6C9E140044C57F /* ShogiBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC89271A6C9E140044C57F /* ShogiBoard.m */; };
+		6BFE14FB1A6DB7B8007A53F0 /* Tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BFE14FA1A6DB7B8007A53F0 /* Tree.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,8 @@
 		6BEC89241A6C9CD20044C57F /* TwoPlayerScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwoPlayerScene.m; sourceTree = "<group>"; };
 		6BEC89261A6C9E140044C57F /* ShogiBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShogiBoard.h; sourceTree = "<group>"; };
 		6BEC89271A6C9E140044C57F /* ShogiBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShogiBoard.m; sourceTree = "<group>"; };
+		6BFE14F91A6DB7B8007A53F0 /* Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
+		6BFE14FA1A6DB7B8007A53F0 /* Tree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tree.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +100,8 @@
 				6BEC89241A6C9CD20044C57F /* TwoPlayerScene.m */,
 				6BEC89261A6C9E140044C57F /* ShogiBoard.h */,
 				6BEC89271A6C9E140044C57F /* ShogiBoard.m */,
+				6BFE14F91A6DB7B8007A53F0 /* Tree.h */,
+				6BFE14FA1A6DB7B8007A53F0 /* Tree.m */,
 				6BEC891D1A6C9C850044C57F /* OnePlayerScene.h */,
 				6BEC891E1A6C9C850044C57F /* OnePlayerScene.m */,
 				6BEC88F31A6C8E9D0044C57F /* AppDelegate.h */,
@@ -240,6 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BEC89251A6C9CD20044C57F /* TwoPlayerScene.m in Sources */,
+				6BFE14FB1A6DB7B8007A53F0 /* Tree.m in Sources */,
 				6BEC88FD1A6C8E9D0044C57F /* GameViewController.m in Sources */,
 				6BEC89281A6C9E140044C57F /* ShogiBoard.m in Sources */,
 				6BEC891C1A6C933A0044C57F /* MainMenuScene.m in Sources */,
@@ -438,6 +444,7 @@
 				6BEC89161A6C8E9D0044C57F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6BEC89171A6C8E9D0044C57F /* Build configuration list for PBXNativeTarget "ShogiKingTests" */ = {
 			isa = XCConfigurationList;
@@ -446,6 +453,7 @@
 				6BEC89191A6C8E9D0044C57F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
