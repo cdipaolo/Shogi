@@ -18,7 +18,7 @@
         [self addChild:bg];
         
         ShogiBoard* board = [[ShogiBoard alloc] init];
-        NSLog(@"%@",[board possibleMovesOfPieceAtRow:[NSNumber numberWithInt:7] column:[NSNumber numberWithInt:1]]);
+        NSLog(@"%@",[board possibleMovesOfPieceAtRow:[NSNumber numberWithInt:1] column:[NSNumber numberWithInt:1]]);
         
     }
     return self;

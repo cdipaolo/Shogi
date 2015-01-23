@@ -37,7 +37,9 @@
 
 // returns the correct macro'ed value for a piece. if index out of range returns 255
 - (int) pieceAtRowI: (int) i ColumnJ: (int) j;
+- (int) pieceAtRowI:(int)i ColumnJ:(int)j forBoard: (int[9][9]) board;
 - (int**) returnBoard;
+- (int**) returnBoardFlipped: (int[9][9]) board;
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol;
 - (NSArray*) possibleMovesOfPieceAtRow: (NSNumber*)row column: (NSNumber*) col;
 - (SKSpriteNode* ) nodeFromPiece:(short)piece;
