@@ -45,7 +45,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 
 // move a piece at a location to another location. Returns the board with b[0][0] changed such that b[0][0]=255
 // returns new board - pass by reference capture piles and number of captures
-- (int**) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b forEnemyCaptures:(int**)enemyCap withEnemyCapNum:(int*)numEnemyCap forAllyCaptures:(int**)allyCap withAllyCapNum:(int*)numAllyCap{
+- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b forEnemyCaptures:(int**)enemyCap withEnemyCapNum:(int*)numEnemyCap forAllyCaptures:(int**)allyCap withAllyCapNum:(int*)numAllyCap{
     NSArray* move = @[ [NSNumber numberWithInt:finalRow] , [NSNumber numberWithInt:finalCol] ];
     if ([[self possibleMovesOfPieceAtRow: [NSNumber numberWithInt: row] column: [NSNumber numberWithInt: col]] containsObject:move]) {
         int piece = [self pieceAtRowI:row ColumnJ:col forBoard:b];
@@ -57,7 +57,10 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             if (piece < 0) { // if piece is enemy add to enemy capture pile
                 *enemyCap[*numEnemyCap] = piece;
                 *numEnemyCap += 1;
-            } else { // else add to ally capture pile
+            } else if (pieceInFinalLocation == KING){ // if king is captured --> game over & set winner
+                self.PlayerIsWinner = piece < 0 ? false : true;
+                self.GameOver = true;
+            } else{ // else add to ally capture pile
                 *allyCap[*numAllyCap] = piece;
                 *numAllyCap += 1;
             }
@@ -68,7 +71,6 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             b[0][0] = 255;
         }
     }
-    return b;
 }
 
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol {
