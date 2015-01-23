@@ -19,6 +19,7 @@
         
         ShogiBoard* board = [[ShogiBoard alloc] init];
         NSLog(@"%@",[board possibleMovesOfPieceAtRow:[NSNumber numberWithInt:1] column:[NSNumber numberWithInt:1]]);
+        [board movePieceAtRow:1 column:1 toRow:6 toColumn:1];
         
     }
     return self;

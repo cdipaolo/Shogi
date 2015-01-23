@@ -39,13 +39,55 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 }
 
 - (int) pieceAtRowI:(int)i ColumnJ:(int)j forBoard: (int[9][9]) board {
-    // still diggin that terniary operator!
+    // dig that terniary operator!
     return i<9 && j<9 ? board[i][j]: 255;
 }
 
-// move a piece at a location to another location. Does nothing if move not valid
-- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol {
-    //do stuff here
+// move a piece at a location to another location. Returns the board with b[0][0] changed such that b[0][0]=255
+// returns new board - pass by reference capture piles and number of captures
+- (int**) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b forEnemyCaptures:(int**)enemyCap withEnemyCapNum:(int*)numEnemyCap forAllyCaptures:(int**)allyCap withAllyCapNum:(int*)numAllyCap{
+    NSArray* move = @[ [NSNumber numberWithInt:finalRow] , [NSNumber numberWithInt:finalCol] ];
+    if ([[self possibleMovesOfPieceAtRow: [NSNumber numberWithInt: row] column: [NSNumber numberWithInt: col]] containsObject:move]) {
+        int piece = [self pieceAtRowI:row ColumnJ:col forBoard:b];
+        int pieceInFinalLocation = [self pieceAtRowI:finalRow ColumnJ:finalCol forBoard:b];
+        
+        if (pieceInFinalLocation != EMPTY) { // if pieceInFinalLocation is not 0 (or EMPTY)
+            
+            // if piece captures (tested above) add piece to capture pile on correct side
+            if (piece < 0) { // if piece is enemy add to enemy capture pile
+                *enemyCap[*numEnemyCap] = piece;
+                *numEnemyCap += 1;
+            } else { // else add to ally capture pile
+                *allyCap[*numAllyCap] = piece;
+                *numAllyCap += 1;
+            }
+            
+            b[finalRow][finalCol] = piece;
+            b[row][col] = EMPTY;
+        } else {
+            b[0][0] = 255;
+        }
+    }
+    return b;
+}
+
+- (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol {
+    
+    [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces forEnemyCaptures:&_enemyCaptures withEnemyCapNum:&_numEnemyCaptures forAllyCaptures:&_playerCaptures withAllyCapNum:&_numPlayerCaptures];
+    for (int i=0; i<_numEnemyCaptures; ++i) printf("%d \n", _enemyCaptures[i]);
+    printf("\n");
+    if (_pieces[0][0] != 255) {
+        printf("\nMoving piece at <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
+        
+        for (int i=0; i<9; ++i) {
+            for (int j=0; j<9; ++j) {
+                printf("%d ",_pieces[i][j]);
+            }
+            printf("\n");
+        }
+    } else {
+        printf("\nMove NOT VALID from <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
+    }
 }
 
 // returns all possible moves of a piece at a location in an NSArray of NSNumbers
@@ -518,17 +560,6 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     return _pieces;
 }
 
-/*- (int**) returnBoardFlipped: (int[9][9]) board {
-    int** newPieces = malloc(81 * sizeof(int));
-    for (int i=8; i > -1; --i){
-        for (int j=8; j > -1; --j){
-            int tmp = -1 * board[i][j];
-            newPieces[8-i][8-j] = tmp;
-        }
-    }
-    return newPieces;
-}*/
-
 - (SKSpriteNode*) nodeFromPiece:(short )piece {
     // if piece < 0, the piece is the enemy's and we'll have to rotate!
     SKAction* rotate = piece<0 ? [SKAction rotateByAngle:(CGFloat)M_PI duration:0.0] : nil;
@@ -582,6 +613,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 
 
 // initialize a Shogi Board representation based on an array list of the pieces
+// must send a 9x9 array of pieces
 -(id) initWithArray: (int[9][9]) pieces {
     self = [super init];
     
@@ -595,6 +627,15 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 printf("%d  ",_pieces[i][j]);
             }printf("\n");
         }
+        
+        self.playerCaptures = malloc(40 * sizeof(int));
+        self.numPlayerCaptures = 0;
+        
+        self.enemyCaptures = malloc(40 * sizeof(int));
+        self.numEnemyCaptures = 0;
+        
+        self.GameOver = false;
+        self.PlayerIsWinner = false;
     }
     return self;
 }
@@ -602,6 +643,11 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 // init Shogi Board with defualt starting pieces
 -(id) init {
     return [self initWithArray: _defaultPieces];
+}
+
+-(void) dealloc {
+    free(_playerCaptures);
+    free(_enemyCaptures);
 }
 
 @end

@@ -31,15 +31,19 @@
 @interface ShogiBoard : NSObject
 
 @property (nonatomic) NSDictionary* numberToLetter;
-@property (nonatomic) int** playerCaptures;
-@property (nonatomic) int** enemyCaptures;
+@property (nonatomic) int* playerCaptures;
+@property (nonatomic) int* enemyCaptures;
+@property (nonatomic) int numPlayerCaptures;
+@property (nonatomic) int numEnemyCaptures;
+@property (nonatomic) bool GameOver;
+@property (nonatomic) bool PlayerIsWinner;
 
 
 // returns the correct macro'ed value for a piece. if index out of range returns 255
 - (int) pieceAtRowI: (int) i ColumnJ: (int) j;
 - (int) pieceAtRowI:(int)i ColumnJ:(int)j forBoard: (int[9][9]) board;
 - (int**) returnBoard;
-- (int**) returnBoardFlipped: (int[9][9]) board;
+- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int**)b forEnemyCaptures:(int**)enemyCap withEnemyCapNum:(int*)numEnemyCap forAllyCaptures:(int**)allyCap withAllyCapNum:(int*)numAllyCap;
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol;
 - (NSArray*) possibleMovesOfPieceAtRow: (NSNumber*)row column: (NSNumber*) col;
 - (SKSpriteNode* ) nodeFromPiece:(short)piece;
