@@ -46,7 +46,7 @@
 - (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int**)b forEnemyCaptures:(int**)enemyCap withEnemyCapNum:(int*)numEnemyCap forAllyCaptures:(int**)allyCap withAllyCapNum:(int*)numAllyCap;
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol;
 - (NSArray*) possibleMovesOfPieceAtRow: (NSNumber*)row column: (NSNumber*) col;
-- (SKSpriteNode* ) nodeFromPiece:(short)piece;
+- (SKSpriteNode* ) nodeFromPiece:(int)piece;
 - (id) initWithArray: (int[9][9]) pieces;
 - (id) init;
 

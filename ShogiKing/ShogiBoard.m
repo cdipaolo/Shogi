@@ -13,7 +13,7 @@
 
 const static int _defaultPieces[9][9] =  {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-KNIGHT,-LANCE},
                                     {EMPTY,-ROOK,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,-BISHOP,EMPTY},
-                                    {-PAWN, /*-PAWN*/EMPTY, -PAWN, -PAWN, -PAWN, -PAWN, -PAWN, -PAWN, -PAWN},
+                                    {-PAWN, -PAWN, -PAWN, -PAWN, -PAWN, -PAWN, -PAWN, -PAWN, -PAWN},
                                     {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
                                     {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
                                     {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
@@ -55,13 +55,13 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             
             // if piece captures (tested above) add piece to capture pile on correct side
             if (piece < 0) { // if piece is enemy add to enemy capture pile
-                *enemyCap[*numEnemyCap] = piece;
+                *enemyCap[*numEnemyCap] = -pieceInFinalLocation;
                 *numEnemyCap += 1;
             } else if (pieceInFinalLocation == KING || pieceInFinalLocation == -KING){ // if king is captured --> game over & set winner
                 self.PlayerIsWinner = piece < 0 ? false : true;
                 self.GameOver = true;
             } else{ // else add to ally capture pile
-                *allyCap[*numAllyCap] = piece;
+                *allyCap[*numAllyCap] = -pieceInFinalLocation;
                 *numAllyCap += 1;
             }
             
@@ -562,13 +562,25 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     return _pieces;
 }
 
-- (SKSpriteNode*) nodeFromPiece:(short )piece {
+- (SKSpriteNode*) nodeFromPiece:(int)piece {
     // if piece < 0, the piece is the enemy's and we'll have to rotate!
     SKAction* rotate = piece<0 ? [SKAction rotateByAngle:(CGFloat)M_PI duration:0.0] : nil;
     
     SKSpriteNode* node = [[SKSpriteNode alloc] init];
     
-    switch (piece) {
+    // |piece| is the value as a piece disregarding player
+    int absPiece = piece > 0 ? piece : -piece;
+    if (absPiece > EMPTY && absPiece < 15) { // if piece is a valid piece!
+        node = [SKSpriteNode spriteNodeWithImageNamed:[self.numberToLetter objectForKey:[NSNumber numberWithInt:absPiece]]];
+    } else if (absPiece == EMPTY) {
+        node = nil;
+    }else {
+        NSLog(@"Error 502: <%d> is not a valid piece integer name", piece);
+        node = nil;
+    }
+    
+    
+    /*switch (absPiece) {
         // match the non-promoted pieces to their node!
         case PAWN:
             node =[SKSpriteNode spriteNodeWithImageNamed:@"p"];
@@ -601,9 +613,12 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             node =[SKSpriteNode spriteNodeWithImageNamed:@"bP"];
         case ROOKP:
             node =[SKSpriteNode spriteNodeWithImageNamed:@"rP"];
+        
+        case EMPTY:
+            node = nil;
         default:
-            NSLog(@"Error 502: %d is not a valid piece integer name", piece);
-    }
+            NSLog(@"Error 502: <%d> is not a valid piece integer name", piece);
+    }*/
     
     if (piece < 0){
         [node runAction:rotate];

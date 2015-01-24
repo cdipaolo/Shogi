@@ -7,7 +7,14 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "ShogiBoard.h"
 
 @interface OnePlayerScene : SKScene
+
+@property (nonatomic) ShogiBoard* board;
+@property (nonatomic) NSMutableArray* possibleMovesForSelectedPiece;
+@property (nonatomic) int gridBoxWidth;
+
+-(void) updateBoard;
 
 @end
