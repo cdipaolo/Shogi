@@ -57,7 +57,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             if (piece < 0) { // if piece is enemy add to enemy capture pile
                 *enemyCap[*numEnemyCap] = piece;
                 *numEnemyCap += 1;
-            } else if (pieceInFinalLocation == KING){ // if king is captured --> game over & set winner
+            } else if (pieceInFinalLocation == KING || pieceInFinalLocation == -KING){ // if king is captured --> game over & set winner
                 self.PlayerIsWinner = piece < 0 ? false : true;
                 self.GameOver = true;
             } else{ // else add to ally capture pile

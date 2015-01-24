@@ -17,10 +17,21 @@
         bg.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
         [self addChild:bg];
         
-        ShogiBoard* board = [[ShogiBoard alloc] init];
-        NSLog(@"%@",[board possibleMovesOfPieceAtRow:[NSNumber numberWithInt:1] column:[NSNumber numberWithInt:1]]);
-        [board movePieceAtRow:1 column:1 toRow:6 toColumn:1];
+        SKShapeNode* onePlayerGame = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(255, 45)];
+        //onePlayerGame.fillColor = [UIColor whiteColor];
+        onePlayerGame.name = @"OnePlayerGame";
+        onePlayerGame.position = CGPointMake(self.frame.size.width/2 + 5, self.frame.size.height/2 - 15);
+        onePlayerGame.hidden = false;
+        onePlayerGame.zPosition++;
+        [self addChild:onePlayerGame];
         
+        SKShapeNode* ComputerGame = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(255, 45)];
+        //ComputerGame.fillColor = [UIColor whiteColor];
+        ComputerGame.name = @"ComputerGame";
+        ComputerGame.position = CGPointMake(self.frame.size.width/2 + 5, self.frame.size.height/2 - 75);
+        ComputerGame.hidden = false;
+        ComputerGame.zPosition++;
+        [self addChild:ComputerGame];
     }
     return self;
 }
