@@ -51,24 +51,22 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
         int piece = [self pieceAtRowI:row ColumnJ:col forBoard:b];
         int pieceInFinalLocation = [self pieceAtRowI:finalRow ColumnJ:finalCol forBoard:b];
         
-        if (pieceInFinalLocation != EMPTY) { // if pieceInFinalLocation is not 0 (or EMPTY)
+        if (pieceInFinalLocation * piece <= 0) { // if pieceInFinalLocation is not an ally
             
             // if piece captures (tested above) add piece to capture pile on correct side
-            if (piece < 0) { // if piece is enemy add to enemy capture pile
+            if (piece < 0 && pieceInFinalLocation > 0) { // if piece is enemy add to enemy capture pile
                 *enemyCap[*numEnemyCap] = -pieceInFinalLocation;
                 *numEnemyCap += 1;
             } else if (pieceInFinalLocation == KING || pieceInFinalLocation == -KING){ // if king is captured --> game over & set winner
                 self.PlayerIsWinner = piece < 0 ? false : true;
                 self.GameOver = true;
-            } else{ // else add to ally capture pile
+            } else if (piece > 0 && pieceInFinalLocation < 0){ // else add to ally capture pile
                 *allyCap[*numAllyCap] = -pieceInFinalLocation;
                 *numAllyCap += 1;
             }
             
             b[finalRow][finalCol] = piece;
             b[row][col] = EMPTY;
-        } else {
-            b[0][0] = 255;
         }
     }
 }
