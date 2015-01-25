@@ -31,8 +31,8 @@
 @interface ShogiBoard : NSObject
 
 @property (nonatomic) NSDictionary* numberToLetter;
-@property (nonatomic) int* playerCaptures;
-@property (nonatomic) int* enemyCaptures;
+@property (nonatomic) NSMutableArray* playerCaptures;
+@property (nonatomic) NSMutableArray* enemyCaptures;
 @property (nonatomic) int numPlayerCaptures;
 @property (nonatomic) int numEnemyCaptures;
 @property (nonatomic) bool GameOver;

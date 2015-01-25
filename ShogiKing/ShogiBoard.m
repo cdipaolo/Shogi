@@ -45,7 +45,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 
 // move a piece at a location to another location. Returns the board with b[0][0] changed such that b[0][0]=255
 // returns new board - pass by reference capture piles and number of captures
-- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b forEnemyCaptures:(int**)enemyCap withEnemyCapNum:(int*)numEnemyCap forAllyCaptures:(int**)allyCap withAllyCapNum:(int*)numAllyCap{
+- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b forEnemyCaptures:(NSMutableArray**)enemyCap forAllyCaptures:(NSMutableArray**)allyCap {
     NSArray* move = @[ [NSNumber numberWithInt:finalRow] , [NSNumber numberWithInt:finalCol] ];
     if ([[self possibleMovesOfPieceAtRow: [NSNumber numberWithInt: row] column: [NSNumber numberWithInt: col]] containsObject:move]) {
         int piece = [self pieceAtRowI:row ColumnJ:col forBoard:b];
@@ -55,14 +55,21 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             
             // if piece captures (tested above) add piece to capture pile on correct side
             if (piece < 0 && pieceInFinalLocation > 0) { // if piece is enemy add to enemy capture pile
-                *enemyCap[*numEnemyCap] = -pieceInFinalLocation;
-                *numEnemyCap += 1;
+                if (enemyCap != nil)    {
+                    [*enemyCap addObject:[NSNumber numberWithInt:-1*pieceInFinalLocation]];
+                } else {
+                    [self.enemyCaptures addObject:[NSNumber numberWithInt:-1*pieceInFinalLocation]];
+                }
+                
             } else if (pieceInFinalLocation == KING || pieceInFinalLocation == -KING){ // if king is captured --> game over & set winner
                 self.PlayerIsWinner = piece < 0 ? false : true;
                 self.GameOver = true;
             } else if (piece > 0 && pieceInFinalLocation < 0){ // else add to ally capture pile
-                *allyCap[*numAllyCap] = -pieceInFinalLocation;
-                *numAllyCap += 1;
+                if (allyCap != nil) {
+                    [*allyCap addObject:[NSNumber numberWithInt:-1*pieceInFinalLocation]];
+                } else {
+                    [self.playerCaptures addObject:[NSNumber numberWithInt:-1*pieceInFinalLocation]];
+                }
             }
             
             b[finalRow][finalCol] = piece;
@@ -73,21 +80,20 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol {
     
-    [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces forEnemyCaptures:&_enemyCaptures withEnemyCapNum:&_numEnemyCaptures forAllyCaptures:&_playerCaptures withAllyCapNum:&_numPlayerCaptures];
-    for (int i=0; i<_numEnemyCaptures; ++i) printf("%d \n", _enemyCaptures[i]);
+    [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces forEnemyCaptures:nil forAllyCaptures:nil ];
+    printf("Enemy Captures: ");for (NSNumber* piece in self.enemyCaptures) printf("%d ", [piece intValue]); printf("\n");
+    printf("Player Captures: ");for (NSNumber* piece in self.playerCaptures) printf("%d ", [piece intValue]); printf("\n");
     printf("\n");
-    if (_pieces[0][0] != 255) {
-        printf("\nMoving piece at <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
-        
-        for (int i=0; i<9; ++i) {
-            for (int j=0; j<9; ++j) {
-                printf("%d ",_pieces[i][j]);
-            }
-            printf("\n");
+    
+    printf("\nMoving piece at <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
+    
+    for (int i=0; i<9; ++i) {
+        for (int j=0; j<9; ++j) {
+            printf("%d ",_pieces[i][j]);
         }
-    } else {
-        printf("\nMove NOT VALID from <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
+        printf("\n");
     }
+    printf("\n");
 }
 
 // returns all possible moves of a piece at a location in an NSArray of NSNumbers
@@ -576,47 +582,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
         NSLog(@"Error 502: <%d> is not a valid piece integer name", piece);
         node = nil;
     }
-    
-    
-    /*switch (absPiece) {
-        // match the non-promoted pieces to their node!
-        case PAWN:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"p"];
-        case LANCE:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"l"];
-        case SILVER:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"s"];
-        case GOLD:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"g"];
-        case KNIGHT:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"n"];
-        case BISHOP:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"b"];
-        case ROOK:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"r"];
-        case KING:
-            // gotta love that terniary operator... choose Osho or Gyokusho based on whether enemy or not.
-            node = piece<0 ? [SKSpriteNode spriteNodeWithImageNamed:@"kO"] : [SKSpriteNode spriteNodeWithImageNamed:@"kG"];
-            
-        // now for promoted versions of pieces!! :)
-        case PAWNP:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"pP"];
-        case LANCEP:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"lP"];
-        case SILVERP:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"sP"];
-        case KNIGHTP:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"nP"];
-        case BISHOPP:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"bP"];
-        case ROOKP:
-            node =[SKSpriteNode spriteNodeWithImageNamed:@"rP"];
-        
-        case EMPTY:
-            node = nil;
-        default:
-            NSLog(@"Error 502: <%d> is not a valid piece integer name", piece);
-    }*/
+
     
     if (piece < 0){
         [node runAction:rotate];
@@ -643,10 +609,10 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             }printf("\n");
         }
         
-        self.playerCaptures = malloc(40 * sizeof(int));
+        self.playerCaptures = [[NSMutableArray alloc] init];
         self.numPlayerCaptures = 0;
         
-        self.enemyCaptures = malloc(40 * sizeof(int));
+        self.enemyCaptures = [[NSMutableArray alloc] init];
         self.numEnemyCaptures = 0;
         
         self.GameOver = false;
@@ -660,9 +626,5 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     return [self initWithArray: _defaultPieces];
 }
 
--(void) dealloc {
-    free(_playerCaptures);
-    free(_enemyCaptures);
-}
 
 @end
