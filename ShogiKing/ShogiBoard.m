@@ -416,11 +416,11 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             
         case BISHOPP:   // bishop += king-like box                                     // x---x
             // check moves from top right                                              // -xxx-
-            for (int i=iRow-2, j=jCol+2; i>-1 && j<9; --i, ++j){                       // -xox-
+            for (int i=iRow-1, j=jCol+1; i>-1 && j<9; --i, ++j){                       // -xox-
                 int possibleMove = [self pieceAtRowI:i ColumnJ:j forBoard:b];          // -xxx-
                 if (possibleMove < 1){                                                 // x---x
                     [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
-                    if (possibleMove == 0){
+                    if (possibleMove == EMPTY){
                         continue;
                     } else {
                         break;
@@ -429,7 +429,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 break;
             }
             // check moves from top left
-            for (int i=iRow-2, j=jCol-2; i>-1 && j>-1; --i, --j){
+            for (int i=iRow-1, j=jCol-1; i>-1 && j>-1; --i, --j){
                 int possibleMove = [self pieceAtRowI:i ColumnJ:j forBoard:b];
                 if (possibleMove < 1){
                     [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
@@ -442,7 +442,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 break;
             }
             // check moves from bottom left
-            for (int i=iRow+2, j=jCol-2; i<9 && j>-1; ++i, --j){
+            for (int i=iRow+1, j=jCol-1; i<9 && j>-1; ++i, --j){
                 int possibleMove = [self pieceAtRowI:i ColumnJ:j forBoard:b];
                 if (possibleMove < 1){
                     [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
@@ -455,7 +455,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 break;
             }
             // check moves from bottom right
-            for (int i=iRow+2, j=jCol+2; i<9 && j<9; ++i, ++j){
+            for (int i=iRow+1, j=jCol+1; i<9 && j<9; ++i, ++j){
                 int possibleMove = [self pieceAtRowI:i ColumnJ:j forBoard:b];
                 if (possibleMove < 1){
                     [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
@@ -467,13 +467,18 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 }
                 break;
             }
-            // check the box! using same code as king... so including the bishop which it'll pass over.
-            for (int i=iRow-1; i<iRow+2; ++i){
-                for (int j=jCol-1; j<jCol+2; ++j){
-                    int possibleMove = [self pieceAtRowI:i ColumnJ:j forBoard:b];
-                    if (possibleMove < 1){
-                        [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
-                    }
+            // check horizontal moves
+            for (int j = jCol-1; j<jCol+2; ++j) {
+                int possibleMove = [self pieceAtRowI:iRow ColumnJ:j];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:iRow] , [NSNumber numberWithInt:j]]];
+                }
+            }
+            // check vertical moves
+            for (int i = iRow-1; i<iRow+2; ++i) {
+                int possibleMove = [self pieceAtRowI:i ColumnJ:jCol];
+                if (possibleMove < 1){
+                    [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:jCol]]];
                 }
             }
             break;
@@ -481,7 +486,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 
         case ROOKP: // rook += king-like box                                           // --x--
             // check from piece up                                                     // -xxx-
-            for (int i=iRow-2; i > -1 ; --i ){                                         // xxoxx
+            for (int i=iRow-1; i > -1 ; --i ){                                         // xxoxx
                 int possibleMove = [self pieceAtRowI:i ColumnJ:jCol forBoard:b];       // -xxx-
                 if (possibleMove < 1){                                                 // --x--
                     [moves addObject:@[ [NSNumber numberWithInt:i] , col ]];
@@ -494,7 +499,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 break;
             }
             // check from piece to down
-            for (int i=iRow+2; i < 9 ; ++i ){
+            for (int i=iRow+1; i < 9 ; ++i ){
                 int possibleMove = [self pieceAtRowI:i ColumnJ:jCol forBoard:b];
                 if (possibleMove < 1){
                     [moves addObject:@[ [NSNumber numberWithInt:i] , col ]];
@@ -507,7 +512,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 break;
             }
             // check from piece to left
-            for (int j = jCol-2; j > -1; ++j){
+            for (int j = jCol-1; j > -1; ++j){
                 int possibleMove = [self pieceAtRowI:iRow ColumnJ:j forBoard:b];
                 if (possibleMove < 1){
                     [moves addObject:@[ row , [NSNumber numberWithInt:j] ]];
@@ -520,7 +525,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 break;
             }
             // check from piece to right
-            for (int j = jCol+2; j < 9; ++j){
+            for (int j = jCol+1; j < 9; ++j){
                 int possibleMove = [self pieceAtRowI:iRow ColumnJ:j forBoard:b];
                 if (possibleMove < 1){
                     [moves addObject:@[ row , [NSNumber numberWithInt:j] ]];
@@ -532,15 +537,17 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 }
                 break;
             }
-            // check the box using same code as king... pass over bishop
-            for (int i=iRow-1; i<iRow+2; ++i){
-                for (int j=jCol-1; j<jCol+2; ++j){
-                    int possibleMove = [self pieceAtRowI:i ColumnJ:j forBoard:b];
-                    if (possibleMove < 1){
-                        [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
-                    }
-                }
-            }
+            // check diagonal pieces...
+            int upperRight = [self pieceAtRowI:iRow-1 ColumnJ:jCol+1];
+            int upperLeft = [self pieceAtRowI:iRow-1 ColumnJ:jCol-1];
+            int bottomLeftDiag = [self pieceAtRowI:iRow+1 ColumnJ:jCol-1];
+            int bottomRightDiag = [self pieceAtRowI:iRow+1 ColumnJ:jCol+1];
+            
+            if (upperRight < 1) [moves addObject:@[[NSNumber numberWithInt:iRow-1],[NSNumber numberWithInt:jCol+1]]];
+            if (upperLeft < 1) [moves addObject:@[[NSNumber numberWithInt:iRow-1],[NSNumber numberWithInt:jCol-1]]];
+            if (bottomLeftDiag < 1) [moves addObject:@[[NSNumber numberWithInt:iRow+1],[NSNumber numberWithInt:jCol-1]]];
+            if (bottomRightDiag < 1) [moves addObject:@[[NSNumber numberWithInt:iRow+1],[NSNumber numberWithInt:jCol+1]]];
+            
             break;
             
         default:

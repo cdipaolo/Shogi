@@ -9,7 +9,7 @@
 #import <SpriteKit/SpriteKit.h>
 #import "ShogiBoard.h"
 
-@interface OnePlayerScene : SKScene
+@interface TwoPlayerScene : SKScene
 
 @property (nonatomic) ShogiBoard* board;
 @property (nonatomic) NSMutableArray* selectedPiece;

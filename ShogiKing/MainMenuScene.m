@@ -53,12 +53,12 @@
     
     if ([name isEqualToString:@"OnePlayerGame"]){ // Present open game
         printf("Clicked OnePlayerGame from Main Menu...\n\n");
-        OnePlayerScene* onePlayer = [[OnePlayerScene alloc] initWithSize:self.size];
+        TwoPlayerScene* onePlayer = [[TwoPlayerScene alloc] initWithSize:self.size];
         [self.view presentScene:onePlayer];
         
     } else if ([name isEqualToString:@"ComputerGame"]) { // Present game against computer
         printf("Clicked ComputerGame from Main Menu...\n\n");
-        TwoPlayerScene* twoPlayer = [[TwoPlayerScene alloc] initWithSize:self.size];
+        OnePlayerScene* twoPlayer = [[OnePlayerScene alloc] initWithSize:self.size];
         [self.view presentScene:twoPlayer];
     } else {
         printf("Clicked Away from Buttons...\n");

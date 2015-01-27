@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6BA776301A783DC50016F455 /* OnePlayerScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BA7762F1A783DC50016F455 /* OnePlayerScene.m */; };
 		6BEC88F21A6C8E9D0044C57F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC88F11A6C8E9D0044C57F /* main.m */; };
 		6BEC88F51A6C8E9D0044C57F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC88F41A6C8E9D0044C57F /* AppDelegate.m */; };
 		6BEC88FD1A6C8E9D0044C57F /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC88FC1A6C8E9D0044C57F /* GameViewController.m */; };
@@ -15,8 +16,7 @@
 		6BEC89051A6C8E9D0044C57F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BEC89031A6C8E9D0044C57F /* LaunchScreen.xib */; };
 		6BEC89111A6C8E9D0044C57F /* ShogiKingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC89101A6C8E9D0044C57F /* ShogiKingTests.m */; };
 		6BEC891C1A6C933A0044C57F /* MainMenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC891B1A6C933A0044C57F /* MainMenuScene.m */; };
-		6BEC891F1A6C9C850044C57F /* OnePlayerScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC891E1A6C9C850044C57F /* OnePlayerScene.m */; };
-		6BEC89251A6C9CD20044C57F /* TwoPlayerScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC89241A6C9CD20044C57F /* TwoPlayerScene.m */; };
+		6BEC891F1A6C9C850044C57F /* TwoPlayerScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC891E1A6C9C850044C57F /* TwoPlayerScene.m */; };
 		6BEC89281A6C9E140044C57F /* ShogiBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BEC89271A6C9E140044C57F /* ShogiBoard.m */; };
 		6BFE14FB1A6DB7B8007A53F0 /* Tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BFE14FA1A6DB7B8007A53F0 /* Tree.m */; };
 /* End PBXBuildFile section */
@@ -32,6 +32,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6BA7762E1A783DC50016F455 /* OnePlayerScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePlayerScene.h; sourceTree = "<group>"; };
+		6BA7762F1A783DC50016F455 /* OnePlayerScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnePlayerScene.m; sourceTree = "<group>"; };
 		6BEC88EC1A6C8E9D0044C57F /* ShogiKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShogiKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BEC88F01A6C8E9D0044C57F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6BEC88F11A6C8E9D0044C57F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -47,10 +49,8 @@
 		6BEC89101A6C8E9D0044C57F /* ShogiKingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShogiKingTests.m; sourceTree = "<group>"; };
 		6BEC891A1A6C933A0044C57F /* MainMenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuScene.h; sourceTree = "<group>"; };
 		6BEC891B1A6C933A0044C57F /* MainMenuScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuScene.m; sourceTree = "<group>"; };
-		6BEC891D1A6C9C850044C57F /* OnePlayerScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnePlayerScene.h; path = ../OnePlayerScene.h; sourceTree = "<group>"; };
-		6BEC891E1A6C9C850044C57F /* OnePlayerScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnePlayerScene.m; path = ../OnePlayerScene.m; sourceTree = "<group>"; };
-		6BEC89231A6C9CD20044C57F /* TwoPlayerScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwoPlayerScene.h; sourceTree = "<group>"; };
-		6BEC89241A6C9CD20044C57F /* TwoPlayerScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwoPlayerScene.m; sourceTree = "<group>"; };
+		6BEC891D1A6C9C850044C57F /* TwoPlayerScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwoPlayerScene.h; path = ../TwoPlayerScene.h; sourceTree = "<group>"; };
+		6BEC891E1A6C9C850044C57F /* TwoPlayerScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwoPlayerScene.m; path = ../TwoPlayerScene.m; sourceTree = "<group>"; };
 		6BEC89261A6C9E140044C57F /* ShogiBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShogiBoard.h; sourceTree = "<group>"; };
 		6BEC89271A6C9E140044C57F /* ShogiBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShogiBoard.m; sourceTree = "<group>"; };
 		6BFE14F91A6DB7B8007A53F0 /* Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
@@ -96,14 +96,14 @@
 		6BEC88EE1A6C8E9D0044C57F /* ShogiKing */ = {
 			isa = PBXGroup;
 			children = (
-				6BEC89231A6C9CD20044C57F /* TwoPlayerScene.h */,
-				6BEC89241A6C9CD20044C57F /* TwoPlayerScene.m */,
 				6BEC89261A6C9E140044C57F /* ShogiBoard.h */,
 				6BEC89271A6C9E140044C57F /* ShogiBoard.m */,
 				6BFE14F91A6DB7B8007A53F0 /* Tree.h */,
 				6BFE14FA1A6DB7B8007A53F0 /* Tree.m */,
-				6BEC891D1A6C9C850044C57F /* OnePlayerScene.h */,
-				6BEC891E1A6C9C850044C57F /* OnePlayerScene.m */,
+				6BEC891D1A6C9C850044C57F /* TwoPlayerScene.h */,
+				6BEC891E1A6C9C850044C57F /* TwoPlayerScene.m */,
+				6BA7762E1A783DC50016F455 /* OnePlayerScene.h */,
+				6BA7762F1A783DC50016F455 /* OnePlayerScene.m */,
 				6BEC88F31A6C8E9D0044C57F /* AppDelegate.h */,
 				6BEC88F41A6C8E9D0044C57F /* AppDelegate.m */,
 				6BEC891A1A6C933A0044C57F /* MainMenuScene.h */,
@@ -244,12 +244,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6BEC89251A6C9CD20044C57F /* TwoPlayerScene.m in Sources */,
+				6BA776301A783DC50016F455 /* OnePlayerScene.m in Sources */,
 				6BFE14FB1A6DB7B8007A53F0 /* Tree.m in Sources */,
 				6BEC88FD1A6C8E9D0044C57F /* GameViewController.m in Sources */,
 				6BEC89281A6C9E140044C57F /* ShogiBoard.m in Sources */,
 				6BEC891C1A6C933A0044C57F /* MainMenuScene.m in Sources */,
-				6BEC891F1A6C9C850044C57F /* OnePlayerScene.m in Sources */,
+				6BEC891F1A6C9C850044C57F /* TwoPlayerScene.m in Sources */,
 				6BEC88F51A6C8E9D0044C57F /* AppDelegate.m in Sources */,
 				6BEC88F21A6C8E9D0044C57F /* main.m in Sources */,
 			);
