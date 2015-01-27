@@ -45,11 +45,16 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 
 // move a piece at a location to another location. Returns the board with b[0][0] changed such that b[0][0]=255
 // returns new board - pass by reference capture piles and number of captures
-- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b forEnemyCaptures:(NSMutableArray**)enemyCap forAllyCaptures:(NSMutableArray**)allyCap {
+- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b forEnemyCaptures:(NSMutableArray**)enemyCap forAllyCaptures:(NSMutableArray**)allyCap promote:(bool)promotePiece{
     NSArray* move = @[ [NSNumber numberWithInt:finalRow] , [NSNumber numberWithInt:finalCol] ];
     if ([[self possibleMovesOfPieceAtRow: [NSNumber numberWithInt: row] column: [NSNumber numberWithInt: col]] containsObject:move]) {
         int piece = [self pieceAtRowI:row ColumnJ:col forBoard:b];
         int pieceInFinalLocation = [self pieceAtRowI:finalRow ColumnJ:finalCol forBoard:b];
+        
+        if (finalRow < 3 && row > 2 && piece < GOLD && promotePiece) piece += 10;
+        if (finalRow > 5 && row < 6 && piece < GOLD && promotePiece) piece += 10;
+        
+        
         
         if (pieceInFinalLocation * piece <= 0) { // if pieceInFinalLocation is not an ally
             
@@ -78,9 +83,9 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     }
 }
 
-- (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol {
+- (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol promote: (bool)promotePiece {
     
-    [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces forEnemyCaptures:nil forAllyCaptures:nil ];
+    [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces forEnemyCaptures:nil forAllyCaptures:nil promote:promotePiece];
     printf("Enemy Captures: ");for (NSNumber* piece in self.enemyCaptures) printf("%d ", [piece intValue]); printf("\n");
     printf("Player Captures: ");for (NSNumber* piece in self.playerCaptures) printf("%d ", [piece intValue]); printf("\n");
     printf("\n");
@@ -574,7 +579,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     
     // |piece| is the value as a piece disregarding player
     int absPiece = piece > 0 ? piece : -piece;
-    if (absPiece > EMPTY && absPiece < 15) { // if piece is a valid piece!
+    if (absPiece > EMPTY && absPiece < 25) { // if piece is a valid piece!
         node = [SKSpriteNode spriteNodeWithImageNamed:[self.numberToLetter objectForKey:[NSNumber numberWithInt:absPiece]]];
     } else if (absPiece == EMPTY) {
         node = nil;

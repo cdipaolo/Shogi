@@ -132,7 +132,7 @@
         NSArray* indices = [self indicesForNode:nodeTouched];
         
         // move selected piece from indices value to new value on data representation
-        [self.board movePieceAtRow:[[self.selectedPiece objectAtIndex:0] intValue] column:[[self.selectedPiece objectAtIndex:1] intValue] toRow:[[indices objectAtIndex:0] intValue] toColumn:[[indices objectAtIndex:1] intValue]];
+        [self.board movePieceAtRow:[[self.selectedPiece objectAtIndex:0] intValue] column:[[self.selectedPiece objectAtIndex:1] intValue] toRow:[[indices objectAtIndex:0] intValue] toColumn:[[indices objectAtIndex:1] intValue] promote:true];
         
         SKNode* grid = [self childNodeWithName:@"BoardArea"];
         [grid removeAllChildren];
