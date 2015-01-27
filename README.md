@@ -1,5 +1,5 @@
 #Shogi King
-This is an iOS 8 version of an extremely popular Japanese 'variant' (it was created around the same time) of western chess.
+This is an iOS 8 version of an extremely popular Japanese 'variant' (it was created around the same time) of western chess. I have commented a lot of code so anybody looking to do a similar project can *hopefully* get what I am doing.
 
 #Reasons for Making Source Open
 - For people who want to learn to do board game representation, this will be a resource.
