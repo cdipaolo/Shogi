@@ -8,6 +8,7 @@
 
 #import "TwoPlayerScene.h"
 #import "ShogiBoard.h"
+#import "MainMenuScene.h"
 
 @implementation TwoPlayerScene
 
@@ -40,12 +41,19 @@
         profileEnemy.lineWidth = 0;
         [self addChild:profileEnemy];
         
+        SKSpriteNode* mainMenuButton = [SKSpriteNode spriteNodeWithImageNamed:@"mainMenuButton"];
+        mainMenuButton.name = @"MainMenuButton";
+        mainMenuButton.position = CGPointMake(mainMenuButton.size.width/2 + 4, mainMenuButton.size.height/2 + 3);
+        mainMenuButton.zPosition++;
+        [self addChild:mainMenuButton];
+        
         //Shogi Board allocation from custom class
         self.board = [[ShogiBoard alloc] init];
         
-        self.gridBoxWidth = boardArea.frame.size.width / 9;
+        self.gridBoxWidth = (boardArea.frame.size.width + 12) / 9;
         self.selectedPiece = [[NSMutableArray alloc] init];
         self.possibleMovesShowing = false;
+        self.gameMenuShowing = false;
         
         // update the board
         [self updateBoard];
@@ -103,6 +111,38 @@
     return indices;
 }
 
+-(void) showGameMenu {
+    SKSpriteNode* gameMenuPopup = [SKSpriteNode spriteNodeWithImageNamed:@"gameMenuPopup"];
+    gameMenuPopup.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    gameMenuPopup.zPosition += 10;
+    gameMenuPopup.name = @"GameMenuPopup";
+    [self addChild:gameMenuPopup];
+    
+    SKShapeNode* mainMenuButton = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(gameMenuPopup.size.width * .90, gameMenuPopup.size.height * .19)];
+    mainMenuButton.lineWidth = 0;
+    mainMenuButton.position = CGPointMake(0, gameMenuPopup.size.height * .12);
+    mainMenuButton.name = @"MainMenuGOTO";
+    [gameMenuPopup addChild:mainMenuButton];
+    
+    SKShapeNode* restartButton = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(gameMenuPopup.size.width * .90, gameMenuPopup.size.height * .19)];
+    restartButton.lineWidth = 0;
+    restartButton.position = CGPointMake(0, gameMenuPopup.size.height * -.115);
+    restartButton.name = @"RestartGame";
+    [gameMenuPopup addChild:restartButton];
+    
+    SKShapeNode* gameMenuBack = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(gameMenuPopup.size.width * .90, gameMenuPopup.size.height * .19)];
+    gameMenuBack.lineWidth = 0;
+    gameMenuBack.position = CGPointMake(0, gameMenuPopup.size.height * -.35);
+    gameMenuBack.name = @"GameMenuBack";
+    [gameMenuPopup addChild:gameMenuBack];
+    
+}
+
+-(void) hideGameMenu {
+    SKNode* gameMenuPopup = [self childNodeWithName:@"GameMenuPopup"];
+    //[gameMenuPopup removeAllChildren];
+    [gameMenuPopup removeFromParent];
+}
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
@@ -116,7 +156,7 @@
     UITouch* touch = [touches anyObject];
     SKNode* nodeTouched = [self nodeAtPoint: [touch previousLocationInNode:self] ];
     NSString* name = nodeTouched.name;
-    if ([name isEqualToString:@"piece"] && !_possibleMovesShowing){
+    if ([name isEqualToString:@"piece"] && !_possibleMovesShowing && !_gameMenuShowing){
         // if touched a piece and possible moves are not showing select the piece and show possible moves
         self.selectedPiece = [[self indicesForNode:nodeTouched] mutableCopy];
         NSNumber* row = [self.selectedPiece objectAtIndex:0];
@@ -126,7 +166,7 @@
         self.possibleMovesShowing = true;
         [self showPossibleMovesFromArray:moves];
         
-    } else if ([name isEqualToString:@"move"] && _possibleMovesShowing) {
+    } else if ([name isEqualToString:@"move"] && _possibleMovesShowing && !_gameMenuShowing) {
         // if touched possible move then move the piece and update board
         
         NSArray* indices = [self indicesForNode:nodeTouched];
@@ -142,7 +182,7 @@
         //update board
         [self updateBoard];
         
-    } else if ( ![name isEqualToString:@"move"] && _possibleMovesShowing) {
+    } else if ( ![name isEqualToString:@"move"] && _possibleMovesShowing && !_gameMenuShowing) {
         // if possible moves showing and something besides a move selected, hide/delete all possible move circles
         // hide possible moves and set boolean to false
         self.possibleMovesShowing = false;
@@ -154,6 +194,23 @@
         }
         self.selectedPiece = nil;
         
+    // go through game menu possibilities
+    } else if ([name isEqualToString:@"MainMenuButton"] && !_gameMenuShowing) {
+        [self showGameMenu];
+        self.gameMenuShowing = true;
+    } else if ([name isEqualToString:@"GameMenuBack"]) {
+        [self hideGameMenu];
+        self.gameMenuShowing = false;
+    } else if ([name isEqualToString:@"MainMenuGOTO"]) {
+        MainMenuScene* scene = [[MainMenuScene alloc] initWithSize:self.size];
+        [self.view presentScene:scene];
+        self.gameMenuShowing = false;
+    } else if ([name isEqualToString:@"RestartGame"]) {
+        TwoPlayerScene* scene = [[TwoPlayerScene alloc] initWithSize:self.size];
+        [self.view presentScene:scene];
+        self.gameMenuShowing = false;
+        
+    // else nothing touched
     } else {
         printf("\nTouched away from possible nodes...\n");
         if (self.selectedPiece != nil) {

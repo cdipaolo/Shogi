@@ -15,8 +15,11 @@
 @property (nonatomic) NSMutableArray* selectedPiece;
 @property (nonatomic) int gridBoxWidth;
 @property (nonatomic) bool possibleMovesShowing;
+@property (nonatomic) bool gameMenuShowing;
 
 -(void) updateBoard;
+-(void) showGameMenu;
+-(void) hideGameMenu;
 -(void) showPossibleMovesForPiece: (SKSpriteNode*)piece;
 -(void) showPossibleMovesFromArray:(NSArray*)moves;
 -(NSArray*) indicesForNode: (SKNode* )node;
