@@ -10,4 +10,15 @@
 
 @interface TwoPlayerScene : SKScene
 
+@property (nonatomic) ShogiBoard* board;
+@property (nonatomic) NSMutableArray* selectedPiece;
+@property (nonatomic) int gridBoxWidth;
+@property (nonatomic) bool possibleMovesShowing;
+
+-(void) updateBoard;
+-(void) showPossibleMovesForPiece: (SKSpriteNode*)piece;
+-(void) showPossibleMovesFromArray:(NSArray*)moves;
+-(NSArray*) indicesForNode: (SKNode* )node;
+
+
 @end

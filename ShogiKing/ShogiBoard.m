@@ -143,7 +143,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             break;
                                                                                         // ...
         case LANCE:                                                                     // -x-
-            for (int i = iRow; i>-1; --i){                                              // -x-
+            for (int i = iRow-1; i>-1; --i){                                              // -x-
                 // if piece I'm looking at is either empty, enemy, or ally- do stuff.   // -x-
                 int p = [self pieceAtRowI:i ColumnJ:jCol forBoard:b];                   // -o-
                 if (p == EMPTY){
@@ -155,6 +155,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                     break;
                 }
             }
+            NSLog(@"%@",moves);
             break;
 
             
