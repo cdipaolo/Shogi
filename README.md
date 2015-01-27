@@ -11,6 +11,7 @@ This is an iOS 8 version of an extremely popular Japanese 'variant' (it was crea
 - Get two player working
 - Create static evaluation function (probably will need to create neural net)
 - Implement minimax with alpha-beta pruning
+
 ##Goals for after app is working and on App Store
 - Possibly change to more efficient bitboard representation of board, which is harder to implement on the Shogi 9x9 board but still should be better
 - Multiplayer over internet?
