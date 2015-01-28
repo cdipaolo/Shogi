@@ -44,7 +44,7 @@
 - (int) pieceAtRowI: (int) i ColumnJ: (int) j;
 - (int) pieceAtRowI:(int)i ColumnJ:(int)j forBoard: (int[9][9]) board;
 - (int**) returnBoard;
-- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b forEnemyCaptures:(NSMutableArray**)enemyCap forAllyCaptures:(NSMutableArray**)allyCap promote:(bool)promotePiece;
+- (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b promote:(bool)promotePiece;
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol promote: (bool)promotePiece;
 - (NSArray*) possibleMovesOfPieceAtRow: (NSNumber*)row column: (NSNumber*) col;
 - (NSArray*) possibleDropsForPiece:(int)piece onBoard:(int[9][9])b forCaptures:(NSMutableArray*)caps;

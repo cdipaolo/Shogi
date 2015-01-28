@@ -112,6 +112,7 @@
 }
 
 -(void) showGameMenu {
+    self.gameMenuShowing = true;
     SKSpriteNode* gameMenuPopup = [SKSpriteNode spriteNodeWithImageNamed:@"gameMenuPopup"];
     gameMenuPopup.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
     gameMenuPopup.zPosition += 10;
@@ -139,9 +140,38 @@
 }
 
 -(void) hideGameMenu {
+    self.gameMenuShowing = false;
     SKNode* gameMenuPopup = [self childNodeWithName:@"GameMenuPopup"];
-    //[gameMenuPopup removeAllChildren];
+    [gameMenuPopup removeAllChildren];
     [gameMenuPopup removeFromParent];
+}
+
+-(void) showPromotionOptionForPiece:(int)piece {
+    self.promotedPieceOptionShowing = true;
+    SKSpriteNode* promotionsPane = [SKSpriteNode spriteNodeWithImageNamed:@"promotionOptions"];
+    promotionsPane.position = CGPointMake(self.size.width/2, self.size.height/2);
+    promotionsPane.zPosition += 10;
+    promotionsPane.name = @"PromotionsPane";
+    [self addChild:promotionsPane];
+    
+    SKSpriteNode* promoted = [self.board nodeFromPiece:(piece<0 ? piece - 10 : piece + 10)];
+    promoted.position = CGPointMake(promotionsPane.size.width * .22, 0);
+    promoted.name = @"promotion";
+    promoted.zPosition++;
+    [promotionsPane addChild:promoted];
+    
+    SKSpriteNode* notPromoted = [self.board nodeFromPiece:piece];
+    notPromoted.position = CGPointMake(promotionsPane.size.width * -.22, 0);
+    notPromoted.name = @"noPromotion";
+    notPromoted.zPosition++;
+    [promotionsPane addChild:notPromoted];
+}
+
+-(void) hidePromotionOptionPiece{
+    self.promotedPieceOptionShowing = false;
+    SKNode* promotionsPane = [self childNodeWithName:@"PromotionsPane"];
+    [promotionsPane removeAllChildren];
+    [promotionsPane removeFromParent];
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -156,7 +186,34 @@
     UITouch* touch = [touches anyObject];
     SKNode* nodeTouched = [self nodeAtPoint: [touch previousLocationInNode:self] ];
     NSString* name = nodeTouched.name;
-    if ([name isEqualToString:@"piece"] && !_possibleMovesShowing && !_gameMenuShowing){
+    if (!([name isEqualToString:@"promotion"] || [name isEqualToString:@"noPromotion"]) && self.promotedPieceOptionShowing) {
+        printf("IN THERE");
+        // hide possible moves
+        SKNode* grid = [self childNodeWithName:@"BoardArea"];
+        [grid removeAllChildren];
+        self.selectedPiece = nil;
+        self.possibleMovesShowing = false;
+        [self hidePromotionOptionPiece];
+    
+        //update board
+        [self updateBoard];
+    } else if (([name isEqualToString:@"promotion"] || [name isEqualToString:@"noPromotion"]) && self.promotedPieceOptionShowing) {
+        printf("IN HERE");
+        bool promotion = [name isEqualToString:@"promotion"] ? true : false;
+        // move selected piece from indices value to new value on data representation
+        [self.board movePieceAtRow:[[self.selectedPiece objectAtIndex:0] intValue] column:[[self.selectedPiece objectAtIndex:1] intValue] toRow:[[self.indices objectAtIndex:0] intValue] toColumn:[[self.indices objectAtIndex:1] intValue] promote:promotion];
+        
+        SKNode* grid = [self childNodeWithName:@"BoardArea"];
+        [grid removeAllChildren];
+        self.selectedPiece = nil;
+        self.possibleMovesShowing = false;
+        self.indices = nil;
+        [self hidePromotionOptionPiece];
+        
+        //update board
+        [self updateBoard];
+        
+    } else if ([name isEqualToString:@"piece"] && !_possibleMovesShowing && !_gameMenuShowing){
         // if touched a piece and possible moves are not showing select the piece and show possible moves
         self.selectedPiece = [[self indicesForNode:nodeTouched] mutableCopy];
         NSNumber* row = [self.selectedPiece objectAtIndex:0];
@@ -168,20 +225,34 @@
         
     } else if ([name isEqualToString:@"move"] && _possibleMovesShowing && !_gameMenuShowing) {
         // if touched possible move then move the piece and update board
+        int piece = [self.board pieceAtRowI:[[self.selectedPiece objectAtIndex:0] intValue] ColumnJ:[[self.selectedPiece objectAtIndex:1] intValue]];
+        self.indices = [[self indicesForNode:nodeTouched] mutableCopy];
         
-        NSArray* indices = [self indicesForNode:nodeTouched];
-        
-        // move selected piece from indices value to new value on data representation
-        [self.board movePieceAtRow:[[self.selectedPiece objectAtIndex:0] intValue] column:[[self.selectedPiece objectAtIndex:1] intValue] toRow:[[indices objectAtIndex:0] intValue] toColumn:[[indices objectAtIndex:1] intValue] promote:true];
-        
-        SKNode* grid = [self childNodeWithName:@"BoardArea"];
-        [grid removeAllChildren];
-        self.selectedPiece = nil;
-        self.possibleMovesShowing = false;
-        
-        //update board
-        [self updateBoard];
-        
+        int indicesI = [[self.indices objectAtIndex:0] intValue];
+        int pieceI = [[self.selectedPiece objectAtIndex:0] intValue];
+        printf("Piece column- %d | move column- %d\n", pieceI, indicesI);
+        // show promotion options if applicable
+        if (piece > 0 && piece < GOLD && indicesI<3 && pieceI>2){
+            [self showPromotionOptionForPiece:piece];
+        } else if (piece > 0 && piece < GOLD && pieceI<3 && indicesI>2) {
+            [self showPromotionOptionForPiece:piece];
+        } else if (piece < 0 && piece > -GOLD && indicesI>5 && pieceI<6) {
+            [self showPromotionOptionForPiece:piece];
+        } else if (piece < 0 && piece > -GOLD && pieceI>5 && indicesI<6) {
+            [self showPromotionOptionForPiece:piece];
+        } else {
+            // move selected piece from indices value to new value on data representation
+            [self.board movePieceAtRow:[[self.selectedPiece objectAtIndex:0] intValue] column:[[self.selectedPiece objectAtIndex:1] intValue] toRow:[[self.indices objectAtIndex:0] intValue] toColumn:[[self.indices objectAtIndex:1] intValue] promote:false];
+            
+            SKNode* grid = [self childNodeWithName:@"BoardArea"];
+            [grid removeAllChildren];
+            self.selectedPiece = nil;
+            self.possibleMovesShowing = false;
+            self.indices = nil;
+            
+            //update board
+            [self updateBoard];
+        }
     } else if ( ![name isEqualToString:@"move"] && _possibleMovesShowing && !_gameMenuShowing) {
         // if possible moves showing and something besides a move selected, hide/delete all possible move circles
         // hide possible moves and set boolean to false
@@ -197,18 +268,14 @@
     // go through game menu possibilities
     } else if ([name isEqualToString:@"MainMenuButton"] && !_gameMenuShowing) {
         [self showGameMenu];
-        self.gameMenuShowing = true;
     } else if ([name isEqualToString:@"GameMenuBack"]) {
         [self hideGameMenu];
-        self.gameMenuShowing = false;
     } else if ([name isEqualToString:@"MainMenuGOTO"]) {
         MainMenuScene* scene = [[MainMenuScene alloc] initWithSize:self.size];
         [self.view presentScene:scene];
-        self.gameMenuShowing = false;
     } else if ([name isEqualToString:@"RestartGame"]) {
         TwoPlayerScene* scene = [[TwoPlayerScene alloc] initWithSize:self.size];
         [self.view presentScene:scene];
-        self.gameMenuShowing = false;
         
     // else nothing touched
     } else {

@@ -73,9 +73,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 self.PlayerIsWinner = piece < 0 ? false : true;
                 self.GameOver = true;
             } else if (piece > 0 && pieceInFinalLocation < 0){ // else add to ally capture pile
-                printf("here i am");
                 if (pieceInFinalLocation < -KING) {
-                    printf("in here");
                     [self.playerCaptures addObject:[NSNumber numberWithInt:-1*(pieceInFinalLocation+10)]];
                 } else {
                     [self.playerCaptures addObject:[NSNumber numberWithInt:-1*pieceInFinalLocation]];
@@ -96,14 +94,6 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     printf("\n");
     
     printf("\nMoving piece at <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
-    
-    for (int i=0; i<9; ++i) {
-        for (int j=0; j<9; ++j) {
-            printf("%d ",_pieces[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
 }
 
 // returns all possible moves of a piece at a location in an NSArray of NSNumbers
@@ -160,7 +150,6 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                     break;
                 }
             }
-            NSLog(@"%@",moves);
             break;
 
             
@@ -218,17 +207,15 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             // check moves from top right                                              // -x-x-
             for (int i=iRow-1, j=jCol+1; i>-1 && j<9; --i, ++j){                       // --o--
                 int possibleMove = [self pieceAtRowI:i ColumnJ:j forBoard:b];          // -x-x-
-                printf("Piece at <%d,%d> is %d\n",i,j,possibleMove);                   // x---x
+                                                                                       // x---x
                 if (possibleMove < 1){
                     [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:j] ]];
-                    printf("Move at (%d,%d) valid\n", i,j);
                     if (possibleMove == 0){
                         continue;
                     } else {
                         break;
                     }
                 }
-                printf("~Move at (%d,%d) NOT valid- breaking loop\n", i,j);
                 break;
             }
             // check moves from top left
@@ -475,14 +462,14 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             // check horizontal moves
             for (int j = jCol-1; j<jCol+2; ++j) {
                 int possibleMove = [self pieceAtRowI:iRow ColumnJ:j];
-                if (possibleMove < 1){
+                if (possibleMove < 1 && j != jCol){
                     [moves addObject:@[ [NSNumber numberWithInt:iRow] , [NSNumber numberWithInt:j]]];
                 }
             }
             // check vertical moves
             for (int i = iRow-1; i<iRow+2; ++i) {
                 int possibleMove = [self pieceAtRowI:i ColumnJ:jCol];
-                if (possibleMove < 1){
+                if (possibleMove < 1 && i != iRow){
                     [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:jCol]]];
                 }
             }

@@ -16,10 +16,15 @@
 @property (nonatomic) int gridBoxWidth;
 @property (nonatomic) bool possibleMovesShowing;
 @property (nonatomic) bool gameMenuShowing;
+@property (nonatomic) bool promotedPieceOptionShowing;
+@property (nonatomic) NSMutableArray* selectedMove;
+@property (nonatomic) NSMutableArray* indices;
 
 -(void) updateBoard;
 -(void) showGameMenu;
 -(void) hideGameMenu;
+-(void) showPromotionOptionForPiece:(int)piece;
+-(void) hidePromotionOptionPiece;
 -(void) showPossibleMovesForPiece: (SKSpriteNode*)piece;
 -(void) showPossibleMovesFromArray:(NSArray*)moves;
 -(NSArray*) indicesForNode: (SKNode* )node;
