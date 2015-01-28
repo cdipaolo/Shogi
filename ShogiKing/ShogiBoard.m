@@ -47,12 +47,15 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 // returns new board - pass by reference capture piles and number of captures
 - (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b promote:(bool)promotePiece{
     NSArray* move = @[ [NSNumber numberWithInt:finalRow] , [NSNumber numberWithInt:finalCol] ];
+    
     if ([[self possibleMovesOfPieceAtRow: [NSNumber numberWithInt: row] column: [NSNumber numberWithInt: col]] containsObject:move]) {
         int piece = [self pieceAtRowI:row ColumnJ:col forBoard:b];
         int pieceInFinalLocation = [self pieceAtRowI:finalRow ColumnJ:finalCol forBoard:b];
         
-        if (finalRow < 3 && row > 2 && piece < GOLD && promotePiece) piece += 10;
-        if (finalRow > 5 && row < 6 && piece < GOLD && promotePiece) piece += 10;
+        if (finalRow < 3 && row > 2 && piece > 0 && piece < GOLD && promotePiece) piece += 10;
+        if (finalRow > 5 && row < 6 && piece > 0 && piece < GOLD && promotePiece) piece += 10;
+        if (finalRow < 3 && row > 2 && piece < 0 && piece < GOLD && promotePiece) piece -= 10;
+        if (finalRow > 5 && row < 6 && piece < 0 && piece < GOLD && promotePiece) piece -= 10;
         
         
         
@@ -70,7 +73,9 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                 self.PlayerIsWinner = piece < 0 ? false : true;
                 self.GameOver = true;
             } else if (piece > 0 && pieceInFinalLocation < 0){ // else add to ally capture pile
-                if (pieceInFinalLocation > KING) {
+                printf("here i am");
+                if (pieceInFinalLocation < -KING) {
+                    printf("in here");
                     [self.playerCaptures addObject:[NSNumber numberWithInt:-1*(pieceInFinalLocation+10)]];
                 } else {
                     [self.playerCaptures addObject:[NSNumber numberWithInt:-1*pieceInFinalLocation]];
@@ -85,7 +90,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol promote: (bool)promotePiece {
     
-    [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces forEnemyCaptures:nil forAllyCaptures:nil promote:promotePiece];
+    [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces promote:promotePiece];
     printf("Enemy Captures: ");for (NSNumber* piece in self.enemyCaptures) printf("%d ", [piece intValue]); printf("\n");
     printf("Player Captures: ");for (NSNumber* piece in self.playerCaptures) printf("%d ", [piece intValue]); printf("\n");
     printf("\n");
@@ -604,6 +609,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     return node;
 }
 
+
 - (NSArray*) possibleDropsForPiece:(int)piece onBoard:(int[9][9])b forCaptures:(NSMutableArray*)caps{
     NSMutableArray* moves = [[NSMutableArray alloc] init];
     int absPiece = piece < 0 ? -1*piece : piece;
@@ -630,7 +636,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     switch (absPiece) {
         // pawn can't be droppin in last row, in row with another unpromoted pawn
         //     or to check-mate the king
-        /* Will implement the check-mate checking later b/c it'll work bettern once we have AI set up */
+        // Will implement the check-mate checking later b/c it'll work bettern once we have AI set up
         case PAWN:
             for (int j=0; j<1; ++j){
                 NSMutableArray* array = [[NSMutableArray alloc] init];
