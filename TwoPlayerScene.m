@@ -115,11 +115,12 @@
     
     
     // place ally pieces first
-    for (int row = 0; row<3; ++row){
-        for (int i=0; i<7; ++i){
+    for (int row = 0; row<2; ++row){
+        for (int i=0; i<10; ++i){
             if (allyCaps.count >0){
                 SKSpriteNode* piece = [self.board nodeFromPiece:[[allyCaps objectAtIndex:0] intValue]];
-                piece.position = CGPointMake(piece.frame.size.width * ((double)i+0.5), ((double)i+0.5) * piece.frame.size.height);
+                //piece.position = CGPointMake(piece.frame.size.width * ((double)i+0.5), ((double)i+0.5) * piece.frame.size.height);
+                piece.position = CGPointMake(((piece.frame.size.width+7) * ((double)i+0.5))-allyCapArea.frame.size.width/2, (0.65-(double)row*1.05)*(piece.frame.size.height+4));
                 piece.name = @"allyDrop";
             
                 [allyCapArea addChild:piece];
@@ -131,11 +132,12 @@
     }
     
     // place enemy pieces second
-    for (int row = 3; row>-1; --row){
-        for (int i=0; i<7; ++i){
+    for (int row = 0; row>-2; --row){
+        for (int i=0; i<10; ++i){
             if (enemyCaps.count > 0){
                 SKSpriteNode* piece = [self.board nodeFromPiece:[[enemyCaps objectAtIndex:0] intValue]];
-                piece.position = CGPointMake(piece.frame.size.width * ((double)i+0.5), enemyCapArea.frame.size.height - (((double)i+0.5) * piece.frame.size.height));
+                //piece.position = CGPointMake(piece.frame.size.width * ((double)i+0.5), enemyCapArea.frame.size.height - (((double)i+0.5) * piece.frame.size.height));
+                piece.position = CGPointMake((enemyCapArea.frame.size.width/2 - ((double)i+.5)*(piece.frame.size.width+7)), ((double)row*-1.05-.65)*(piece.frame.size.height+4));
                 piece.name = @"allyDrop";
                 
                 [enemyCapArea addChild:piece];
@@ -147,7 +149,7 @@
     }
 }
 
--(void)showPossibleMovesForPiece:(SKSpriteNode *)piece {
+-(void)showPossibleDropsForPiece:(SKSpriteNode *)piece {
     // do stuff
 }
 

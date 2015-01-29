@@ -100,6 +100,9 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 //      for each of the possible moves a certain piece can make.
 /*      ** Returns nil instance if no possible moves **         */
 - (NSArray*) possibleMovesOfPieceAtRow:(NSNumber*)row column:(NSNumber*)col {
+    
+    if (self.GameOver) return nil;
+    
     const int piece = [self pieceAtRowI:[row intValue] ColumnJ:[col intValue]];
     const int flippedPiece = piece < 0 ? -1 * piece : piece;
     
@@ -699,7 +702,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 }
 
 - (NSArray*) possibleDropsForPiece:(int)piece {
-    if (piece < 0){
+    if (piece < 0 && !self.GameOver){
         return [self possibleDropsForPiece:piece onBoard:_pieces forCaptures:self.enemyCaptures];
     } else {
         return [self possibleDropsForPiece:piece onBoard:_pieces forCaptures:self.playerCaptures];
