@@ -47,13 +47,30 @@
         mainMenuButton.zPosition++;
         [self addChild:mainMenuButton];
         
+        SKShapeNode* enemyDropArea = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(410, 110)];
+        enemyDropArea.name = @"EnemyDropArea";
+        enemyDropArea.position = CGPointMake(enemyDropArea.frame.size.width/2+7, self.size.height-enemyDropArea.frame.size.height/2-5);
+        enemyDropArea.zPosition++;
+        enemyDropArea.lineWidth = 0;
+        [self addChild:enemyDropArea];
+        
+        SKShapeNode* allyDropArea = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(410, 110)];
+        allyDropArea.name = @"AllyDropArea";
+        allyDropArea.position = CGPointMake(self.frame.size.width - allyDropArea.frame.size.width/2-7, allyDropArea.frame.size.height/2);
+        allyDropArea.zPosition++;
+        allyDropArea.lineWidth = 0;
+        [self addChild:allyDropArea];
+        
         //Shogi Board allocation from custom class
         self.board = [[ShogiBoard alloc] init];
         
         self.gridBoxWidth = (boardArea.frame.size.width + 12) / 9;
+        self.capGridBoxWidth = (enemyDropArea.frame.size.width)/7;
         self.selectedPiece = [[NSMutableArray alloc] init];
         self.possibleMovesShowing = false;
         self.gameMenuShowing = false;
+        self.promotedPieceOptionShowing = false;
+        self.selectedDropPiece = 0;
         
         // update the board
         [self updateBoard];
@@ -81,6 +98,51 @@
                 [boardArea addChild:piece];
             }
             
+        }
+    }
+    [self updateCaptures];
+}
+
+-(void) updateCaptures {
+    SKNode* allyCapArea = [self childNodeWithName:@"AllyDropArea"];
+    SKNode* enemyCapArea = [self childNodeWithName:@"EnemyDropArea"];
+    
+    [allyCapArea removeAllChildren];
+    [enemyCapArea removeAllChildren];
+    
+    NSMutableArray* allyCaps = [[self.board playerCaptures] mutableCopy];
+    NSMutableArray* enemyCaps = [[self.board enemyCaptures] mutableCopy];
+    
+    
+    // place ally pieces first
+    for (int row = 0; row<3; ++row){
+        for (int i=0; i<7; ++i){
+            if (allyCaps.count >0){
+                SKSpriteNode* piece = [self.board nodeFromPiece:[[allyCaps objectAtIndex:0] intValue]];
+                piece.position = CGPointMake(piece.frame.size.width * ((double)i+0.5), ((double)i+0.5) * piece.frame.size.height);
+                piece.name = @"allyDrop";
+            
+                [allyCapArea addChild:piece];
+                [allyCaps removeObjectAtIndex:0];
+            } else {
+                break;
+            }
+        }
+    }
+    
+    // place enemy pieces second
+    for (int row = 3; row>-1; --row){
+        for (int i=0; i<7; ++i){
+            if (enemyCaps.count > 0){
+                SKSpriteNode* piece = [self.board nodeFromPiece:[[enemyCaps objectAtIndex:0] intValue]];
+                piece.position = CGPointMake(piece.frame.size.width * ((double)i+0.5), enemyCapArea.frame.size.height - (((double)i+0.5) * piece.frame.size.height));
+                piece.name = @"allyDrop";
+                
+                [enemyCapArea addChild:piece];
+                [enemyCaps removeObjectAtIndex:0];
+            } else {
+                break;
+            }
         }
     }
 }

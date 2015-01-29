@@ -14,11 +14,13 @@
 @property (nonatomic) ShogiBoard* board;
 @property (nonatomic) NSMutableArray* selectedPiece;
 @property (nonatomic) int gridBoxWidth;
+@property (nonatomic) int capGridBoxWidth;
 @property (nonatomic) bool possibleMovesShowing;
 @property (nonatomic) bool gameMenuShowing;
 @property (nonatomic) bool promotedPieceOptionShowing;
 @property (nonatomic) NSMutableArray* selectedMove;
 @property (nonatomic) NSMutableArray* indices;
+@property (nonatomic) int selectedDropPiece;
 
 -(void) updateBoard;
 -(void) showGameMenu;

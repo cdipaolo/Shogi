@@ -706,6 +706,26 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     }
 }
 
+- (void) dropPiece:(int)piece forCaptures:(NSMutableArray*)caps toRowI:(NSNumber*)row colJ:(NSNumber*)col {
+    NSLog(@"Dropping piece %d to <%@,%@>\n", piece, row, col);
+    bool pieceInCaps = [caps containsObject:[NSNumber numberWithInt:piece]];
+    bool moveValid = [[self possibleDropsForPiece:piece] containsObject:@[row, col]];
+    
+    // if piece is in capture pile and the move is valid--> proceed with the drop
+    if (pieceInCaps * moveValid) {
+        printf("Move valid...");
+        [caps removeObject:[NSNumber numberWithInt:piece]];
+        _pieces[[row intValue]][[col intValue]] = pieceInCaps;
+    }
+}
+
+- (void) dropPiece:(int)piece toRowI:(NSNumber*)row colJ:(NSNumber*)col {
+    if (piece < 0) {
+        [self dropPiece:piece forCaptures:self.enemyCaptures toRowI:row colJ:col];
+    }
+}
+
+
 // initialize a Shogi Board representation based on an array list of the pieces
 // must send a 9x9 array of pieces
 -(id) initWithArray: (int[9][9]) pieces {

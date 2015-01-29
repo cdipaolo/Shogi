@@ -49,6 +49,8 @@
 - (NSArray*) possibleMovesOfPieceAtRow: (NSNumber*)row column: (NSNumber*) col;
 - (NSArray*) possibleDropsForPiece:(int)piece onBoard:(int[9][9])b forCaptures:(NSMutableArray*)caps;
 - (NSArray*) possibleDropsForPiece:(int)piece;
+- (void) dropPiece:(int)piece forCaptures:(NSMutableArray*)caps toRowI:(NSNumber*)row colJ:(NSNumber*)col;
+- (void) dropPiece:(int)piece toRowI:(NSNumber*)row colJ:(NSNumber*)col;
 - (SKSpriteNode* ) nodeFromPiece:(int)piece;
 - (id) initWithArray: (int[9][9]) pieces;
 - (id) init;
