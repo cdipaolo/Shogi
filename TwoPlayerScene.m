@@ -157,7 +157,6 @@
         int index =  (((enemyCapArea.frame.size.width/2)-node.position.x) / (node.frame.size.width+7))-.5;
         if (index == 4 && node.position.x < 0) index = 5;
         index =  firstRow ? index : index + 10;
-        printf("**%d**",index);
         return [self.board.enemyCaptures objectAtIndex:index];
     } else { // then for ally
         SKNode* allyCapArea = [self childNodeWithName:@"AllyDropArea"];
