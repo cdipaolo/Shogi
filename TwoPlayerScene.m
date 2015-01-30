@@ -18,6 +18,7 @@
         
         SKSpriteNode* bg = [SKSpriteNode spriteNodeWithImageNamed:@"gameSceneBlank"];
         bg.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+        bg.name = @"bg";
         [self addChild:bg];
         
         SKShapeNode* boardArea = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(self.frame.size.width * .965, self.frame.size.width * .97)];
@@ -70,7 +71,7 @@
         self.possibleMovesShowing = false;
         self.gameMenuShowing = false;
         self.promotedPieceOptionShowing = false;
-        self.selectedDropPiece = 0;
+        self.selectedDropPiece = nil;
         
         // update the board
         [self updateBoard];
@@ -119,7 +120,6 @@
         for (int i=0; i<10; ++i){
             if (allyCaps.count >0){
                 SKSpriteNode* piece = [self.board nodeFromPiece:[[allyCaps objectAtIndex:0] intValue]];
-                //piece.position = CGPointMake(piece.frame.size.width * ((double)i+0.5), ((double)i+0.5) * piece.frame.size.height);
                 piece.position = CGPointMake(((piece.frame.size.width+7) * ((double)i+0.5))-allyCapArea.frame.size.width/2, (0.65-(double)row*1.05)*(piece.frame.size.height+4));
                 piece.name = @"allyDrop";
             
@@ -136,9 +136,8 @@
         for (int i=0; i<10; ++i){
             if (enemyCaps.count > 0){
                 SKSpriteNode* piece = [self.board nodeFromPiece:[[enemyCaps objectAtIndex:0] intValue]];
-                //piece.position = CGPointMake(piece.frame.size.width * ((double)i+0.5), enemyCapArea.frame.size.height - (((double)i+0.5) * piece.frame.size.height));
                 piece.position = CGPointMake((enemyCapArea.frame.size.width/2 - ((double)i+.5)*(piece.frame.size.width+7)), ((double)row*-1.05-.65)*(piece.frame.size.height+4));
-                piece.name = @"allyDrop";
+                piece.name = @"enemyDrop";
                 
                 [enemyCapArea addChild:piece];
                 [enemyCaps removeObjectAtIndex:0];
@@ -149,8 +148,24 @@
     }
 }
 
--(void)showPossibleDropsForPiece:(SKSpriteNode *)piece {
-    // do stuff
+-(NSNumber*) pieceForDropNode:(SKNode*)node {
+    SKNode* allyDropArea = [self childNodeWithName:@"AllyDropArea"];
+    bool ally = node.parent.position.y == allyDropArea.position.y;
+    if (!ally) { // find indices for enemy piece
+        SKNode* enemyCapArea = [self childNodeWithName:@"EnemyDropArea"];
+        bool firstRow = node.position.y < 0;
+        int index =  (((enemyCapArea.frame.size.width/2)-node.position.x) / (node.frame.size.width+7))-.5;
+        if (index == 4 && node.position.x < 0) index = 5;
+        index =  firstRow ? index : index + 10;
+        printf("**%d**",index);
+        return [self.board.enemyCaptures objectAtIndex:index];
+    } else { // then for ally
+        SKNode* allyCapArea = [self childNodeWithName:@"AllyDropArea"];
+        bool firstRow = node.position.y > -0.1*allyCapArea.frame.size.height;
+        int index = ((node.position.x + (allyCapArea.frame.size.width/2))/(node.frame.size.width + 7) - 0.5);
+        index = firstRow ? index : index + 10;
+        return [self.board.playerCaptures objectAtIndex:index];
+    }
 }
 
 -(void) showPossibleMovesFromArray:(NSArray* )moves {
@@ -276,7 +291,13 @@
         
         //update board
         [self updateBoard];
-        
+    
+    } else if ([name isEqualToString:@"allyDrop"] && !_possibleMovesShowing && !_gameMenuShowing) {
+        NSNumber* piece = [self pieceForDropNode:nodeTouched];
+        NSLog(@"Drop Touched: %@",piece);
+    } else if ([name isEqualToString:@"enemyDrop"] && !_possibleMovesShowing && !_gameMenuShowing) {
+        NSNumber* piece = [self pieceForDropNode:nodeTouched];
+        NSLog(@"Drop Touched: %@",piece);
     } else if ([name isEqualToString:@"piece"] && !_possibleMovesShowing && !_gameMenuShowing){
         // if touched a piece and possible moves are not showing select the piece and show possible moves
         self.selectedPiece = [[self indicesForNode:nodeTouched] mutableCopy];
