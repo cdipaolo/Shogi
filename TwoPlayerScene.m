@@ -277,7 +277,7 @@
         [self updateBoard];
     } else if (([name isEqualToString:@"promotion"] || [name isEqualToString:@"noPromotion"]) && self.promotedPieceOptionShowing) {
         printf("IN HERE");
-        bool promotion = [name isEqualToString:@"promotion"] ? true : false;
+        bool promotion = [name isEqualToString:@"promotion"];
         // move selected piece from indices value to new value on data representation
         [self.board movePieceAtRow:[[self.selectedPiece objectAtIndex:0] intValue] column:[[self.selectedPiece objectAtIndex:1] intValue] toRow:[[self.indices objectAtIndex:0] intValue] toColumn:[[self.indices objectAtIndex:1] intValue] promote:promotion];
         

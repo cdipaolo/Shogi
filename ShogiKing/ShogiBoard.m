@@ -52,10 +52,42 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
         int piece = [self pieceAtRowI:row ColumnJ:col forBoard:b];
         int pieceInFinalLocation = [self pieceAtRowI:finalRow ColumnJ:finalCol forBoard:b];
         
-        if (finalRow < 3 && row > 2 && piece > 0 && piece < GOLD && promotePiece) piece += 10;
-        if (finalRow > 5 && row < 6 && piece > 0 && piece < GOLD && promotePiece) piece += 10;
-        if (finalRow < 3 && row > 2 && piece < 0 && piece < GOLD && promotePiece) piece -= 10;
-        if (finalRow > 5 && row < 6 && piece < 0 && piece < GOLD && promotePiece) piece -= 10;
+        // regular promotion when moving into promotion area
+        if (promotePiece){
+            // ally pieces promotion
+            if (finalRow < 3 && row > 2 && piece > 0 && piece < GOLD ) piece += 10;
+            else if (finalRow > 2 && row < 3 && piece > 0 && piece < GOLD ) piece += 10;
+        
+            // enemy pieces promotion
+            if (finalRow > 5 && row < 6 && piece < 0 && piece < GOLD ) piece -= 10;
+            else if (finalRow < 6 && row > 5 && piece < 0 && piece < GOLD ) piece -= 10;
+        }
+        
+        // force promotion for lance, pawn, and knight
+        switch (piece) {
+            case PAWN:
+                if (finalRow < 1) piece += 10;
+                break;
+            case LANCE:
+                if (finalRow < 1) piece += 10;
+                break;
+            case KNIGHT:
+                if (finalRow < 2) piece += 10;
+                break;
+                
+            // enemy pieces
+            case -PAWN:
+                if (finalRow > 7) piece -= 10;
+                break;
+            case -LANCE:
+                if (finalRow > 7) piece -= 10;
+                break;
+            case -KNIGHT:
+                if (finalRow > 6) piece -= 10;
+                
+            default:
+                break;
+        }
         
         
         
