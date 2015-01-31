@@ -212,6 +212,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             // iterate through top and middle in box of moves       // xox
             for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
                 for (int j = jCol-1; j<jCol+2; ++j){
+                    if (i < 0 || j < 0 || j > 8) continue;
                     int newPiece = [self pieceAtRowI:i ColumnJ:j forBoard:b];
                     if ( newPiece < 1 ){
                         [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
@@ -371,6 +372,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             // iterate through top and middle in box of moves       // xox
             for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
                 for (int j = jCol-1; j<jCol+2; ++j){
+                    if (i < 0 || j < 0 || j > 8) continue;
                     int newPiece = [self pieceAtRowI:i ColumnJ:j forBoard:b];
                     if ( newPiece < 1 ){
                         [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
@@ -390,6 +392,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             // iterate through top and middle in box of moves       // xox
             for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
                 for (int j = jCol-1; j<jCol+2; ++j){
+                    if (i < 0 || j < 0 || j > 8) continue;
                     int newPiece = [self pieceAtRowI:i ColumnJ:j forBoard:b];
                     if ( newPiece < 1 ){
                         [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
@@ -409,6 +412,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             // iterate through top and middle in box of moves       // xox
             for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
                 for (int j = jCol-1; j<jCol+2; ++j){
+                    if (i < 0 || j < 0 || j > 8) continue;
                     int newPiece = [self pieceAtRowI:i ColumnJ:j forBoard:b];
                     if ( newPiece < 1 ){
                         [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
@@ -428,6 +432,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             // iterate through top and middle in box of moves       // xox
             for (int i = iRow-1; i < iRow+1; ++i){                  // -x-
                 for (int j = jCol-1; j<jCol+2; ++j){
+                    if (i < 0 || j < 0 || j > 8) continue;
                     int newPiece = [self pieceAtRowI:i ColumnJ:j forBoard:b];
                     if ( newPiece < 1 ){
                         [moves addObject:@[ [NSNumber numberWithInt:i], [NSNumber numberWithInt:j] ]];
