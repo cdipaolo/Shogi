@@ -180,6 +180,21 @@
     }
 }
 
+-(void) showPossibleDropsForPiece:(SKNode *)piece {
+    NSNumber* pieceValue = [self pieceForDropNode:piece];
+    NSArray* moves = [self.board possibleDropsForPiece:[pieceValue intValue]];
+    SKShapeNode* boardArea = (SKShapeNode*)[self childNodeWithName:@"BoardArea"];
+    for (NSArray* move in moves) {
+        int i = [[move objectAtIndex:0] intValue];
+        int j = [[move objectAtIndex:1] intValue];
+        SKSpriteNode* possibleMove = [SKSpriteNode spriteNodeWithImageNamed:@"possibleMove"];
+        possibleMove.position = CGPointMake(-self.gridBoxWidth * (4-j), self.gridBoxWidth * (4-i));
+        possibleMove.name = @"move";
+        
+        [boardArea addChild:possibleMove];
+    }
+}
+
 -(NSArray* ) indicesForNode:(SKNode *)node {
     int j = 4 + (node.position.x / self.gridBoxWidth);
     int i = 4 - (node.position.y / self.gridBoxWidth);
@@ -292,11 +307,17 @@
         [self updateBoard];
     
     } else if ([name isEqualToString:@"allyDrop"] && !_possibleMovesShowing && !_gameMenuShowing) {
-        NSNumber* piece = [self pieceForDropNode:nodeTouched];
-        NSLog(@"Drop Touched: %@",piece);
+        self.possibleMovesShowing = true;
+        self.selectedPiece = nil;
+        self.selectedDropPiece = [self pieceForDropNode:nodeTouched];
+        [self showPossibleDropsForPiece:nodeTouched];
+        
     } else if ([name isEqualToString:@"enemyDrop"] && !_possibleMovesShowing && !_gameMenuShowing) {
-        NSNumber* piece = [self pieceForDropNode:nodeTouched];
-        NSLog(@"Drop Touched: %@",piece);
+        self.possibleMovesShowing = true;
+        self.selectedPiece = nil;
+        self.selectedDropPiece = [self pieceForDropNode:nodeTouched];
+        [self showPossibleDropsForPiece:nodeTouched];
+        
     } else if ([name isEqualToString:@"piece"] && !_possibleMovesShowing && !_gameMenuShowing){
         // if touched a piece and possible moves are not showing select the piece and show possible moves
         self.selectedPiece = [[self indicesForNode:nodeTouched] mutableCopy];
@@ -306,6 +327,23 @@
         
         self.possibleMovesShowing = true;
         [self showPossibleMovesFromArray:moves];
+    } else if ([name isEqualToString:@"move"] && _possibleMovesShowing && !_gameMenuShowing &&_selectedPiece == nil){
+        // if touched possible move then move the piece and update board
+        int piece = [self.selectedDropPiece intValue];
+        NSLog(@"Piece about to be droppin -- %d",piece);
+        self.indices = [[self indicesForNode:nodeTouched] mutableCopy];
+        
+        // move selected piece from indices value to new value on data representation
+        [self.board dropPiece:piece toRowI:[self.indices objectAtIndex:0] colJ:[self.indices objectAtIndex:1]];
+        
+        SKNode* grid = [self childNodeWithName:@"BoardArea"];
+        [grid removeAllChildren];
+        self.selectedDropPiece = nil;
+        self.possibleMovesShowing = false;
+        self.indices = nil;
+        
+        //update board
+        [self updateBoard];
         
     } else if ([name isEqualToString:@"move"] && _possibleMovesShowing && !_gameMenuShowing) {
         // if touched possible move then move the piece and update board
@@ -314,7 +352,7 @@
         
         int indicesI = [[self.indices objectAtIndex:0] intValue];
         int pieceI = [[self.selectedPiece objectAtIndex:0] intValue];
-        printf("Piece column- %d | move column- %d\n", pieceI, indicesI);
+
         // show promotion options if applicable
         if (piece > 0 && piece < GOLD && indicesI<3 && pieceI>2){
             [self showPromotionOptionForPiece:piece];

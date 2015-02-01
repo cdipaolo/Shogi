@@ -27,7 +27,7 @@
 -(void) hideGameMenu;
 -(void) showPromotionOptionForPiece:(int)piece;
 -(void) hidePromotionOptionPiece;
--(void) showPossibleDropsForPiece: (SKSpriteNode*)piece;
+-(void) showPossibleDropsForPiece: (SKNode*)piece;
 -(void) showPossibleMovesFromArray:(NSArray*)moves;
 -(NSArray*) indicesForNode: (SKNode* )node;
 -(NSNumber*) pieceForDropNode:(SKNode*)node;

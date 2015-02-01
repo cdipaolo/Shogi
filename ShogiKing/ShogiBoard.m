@@ -508,6 +508,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             }
             // check vertical moves
             for (int i = iRow-1; i<iRow+2; ++i) {
+                if (i < 0) continue;
                 int possibleMove = [self pieceAtRowI:i ColumnJ:jCol];
                 if (possibleMove < 1 && i != iRow){
                     [moves addObject:@[ [NSNumber numberWithInt:i] , [NSNumber numberWithInt:jCol]]];
@@ -619,7 +620,9 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     
     // |piece| is the value as a piece disregarding player
     int absPiece = piece > 0 ? piece : -piece;
-    if (absPiece > EMPTY && absPiece < 25) { // if piece is a valid piece!
+    if (piece == -KING) {
+        node = [SKSpriteNode spriteNodeWithImageNamed:[self.numberToLetter objectForKey:[NSNumber numberWithInt:piece]]];
+    }else if (absPiece > EMPTY && absPiece < 25) { // if piece is a valid piece!
         node = [SKSpriteNode spriteNodeWithImageNamed:[self.numberToLetter objectForKey:[NSNumber numberWithInt:absPiece]]];
     } else if (absPiece == EMPTY) {
         node = nil;
@@ -637,7 +640,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 }
 
 
-- (NSArray*) possibleDropsForPiece:(int)piece onBoard:(int[9][9])b forCaptures:(NSMutableArray*)caps{
+- (NSArray*) possibleDropsForPiece:(int)piece onBoard:(int[9][9])b forCaptures:(NSMutableArray*)caps {
     NSMutableArray* moves = [[NSMutableArray alloc] init];
     int absPiece = piece < 0 ? -1*piece : piece;
     
@@ -645,11 +648,11 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
         return nil;
     }
     
-    int** flippedBoard = malloc(81 * sizeof(int));
+    int flippedBoard[9][9];
     if (piece < 0) {
         for (int i=0; i<9; ++i){
             for (int j=0; j<9; ++j){
-                flippedBoard[9-i][9-j] = b[i][j];
+                flippedBoard[8-i][8-j] = -1*b[i][j];
             }
         }
     } else {
@@ -661,26 +664,24 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     }
     
     switch (absPiece) {
-        // pawn can't be droppin in last row, in row with another unpromoted pawn
+        // pawn can't be droppin in last row, or in row with another unpromoted pawn
         //     or to check-mate the king
-        // Will implement the check-mate checking later b/c it'll work bettern once we have AI set up
+        // Will implement the check-mate checking later b/c it'll work better once we have AI set up
         case PAWN:
-            for (int j=0; j<1; ++j){
+            for (int j=0; j<9; ++j){
                 NSMutableArray* array = [[NSMutableArray alloc] init];
                 bool broke = false;
                 for (int i=1; i<9; ++i){
-                    int pieceInFinalLocation = [self pieceAtRowI:i ColumnJ:j forBoard:b];
+                    int pieceInFinalLocation = [self pieceAtRowI:i ColumnJ:j forBoard:flippedBoard];
                     if (pieceInFinalLocation == EMPTY){
-                        [moves addObject:@[[NSNumber numberWithInt:i],[NSNumber numberWithInt:j]]];
+                        [array addObject:@[[NSNumber numberWithInt:i],[NSNumber numberWithInt:j]]];
                     } else if (pieceInFinalLocation == PAWN) {
                         broke = true;
-                        break;
                     }
                 }
-                if (broke){
-                    break;
+                if (broke == false){
+                    [moves addObjectsFromArray:array];
                 }
-                [moves addObjectsFromArray:array];
             }
             break;
             
@@ -688,31 +689,33 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
         case KNIGHT:
             for (int i=2; i<9; ++i){
                 for (int j=0; j<9; ++j){
-                    int pieceInFinalLocation = [self pieceAtRowI:i ColumnJ:j forBoard:b];
+                    int pieceInFinalLocation = [self pieceAtRowI:i ColumnJ:j forBoard:flippedBoard];
                     if (pieceInFinalLocation == EMPTY){
                         [moves addObject:@[[NSNumber numberWithInt:i],[NSNumber numberWithInt:j]]];
                     }
                 }
             }
+            break;
             
             
         // lance cannot be dropped in last row
         case LANCE:
             for (int i=1; i<9; ++i){
                 for (int j=0; j<9; ++j){
-                    int pieceInFinalLocation = [self pieceAtRowI:i ColumnJ:j forBoard:b];
+                    int pieceInFinalLocation = [self pieceAtRowI:i ColumnJ:j forBoard:flippedBoard];
                     if (pieceInFinalLocation == EMPTY){
                         [moves addObject:@[[NSNumber numberWithInt:i],[NSNumber numberWithInt:j]]];
                     }
                 }
             }
+            break;
                 
             
         // all other pieces have open drops
         default:
             for (int i=0; i<9; ++i){
                 for (int j=0; j<9; ++j){
-                    int pieceInFinalLocation = [self pieceAtRowI:i ColumnJ:j forBoard:b];
+                    int pieceInFinalLocation = [self pieceAtRowI:i ColumnJ:j forBoard:flippedBoard];
                     if (pieceInFinalLocation == EMPTY){
                         [moves addObject:@[[NSNumber numberWithInt:i],[NSNumber numberWithInt:j]]];
                     }
@@ -720,8 +723,6 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             }
             break;
     }
-    
-    free(flippedBoard);
     
     if (piece < 0 && moves.count > 0){
         NSMutableArray* flippedMoves = [[NSMutableArray alloc] init];
@@ -749,19 +750,22 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 - (void) dropPiece:(int)piece forCaptures:(NSMutableArray*)caps toRowI:(NSNumber*)row colJ:(NSNumber*)col {
     NSLog(@"Dropping piece %d to <%@,%@>\n", piece, row, col);
     bool pieceInCaps = [caps containsObject:[NSNumber numberWithInt:piece]];
+
     bool moveValid = [[self possibleDropsForPiece:piece] containsObject:@[row, col]];
     
     // if piece is in capture pile and the move is valid--> proceed with the drop
     if (pieceInCaps * moveValid) {
         printf("Move valid...");
         [caps removeObject:[NSNumber numberWithInt:piece]];
-        _pieces[[row intValue]][[col intValue]] = pieceInCaps;
+        _pieces[[row intValue]][[col intValue]] = piece;
     }
 }
 
 - (void) dropPiece:(int)piece toRowI:(NSNumber*)row colJ:(NSNumber*)col {
     if (piece < 0) {
         [self dropPiece:piece forCaptures:self.enemyCaptures toRowI:row colJ:col];
+    } else {
+        [self dropPiece:piece forCaptures:self.playerCaptures toRowI:row colJ:col];
     }
 }
 
