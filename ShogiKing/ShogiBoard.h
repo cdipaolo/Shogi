@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Conner DiPaolo. All rights reserved.
 //
 
+// FYI I call the person on the 'bottom' of the board "player" or "ally" in the code equally
+// The player on the top of the board is the 'enemy'
+
 #import <Foundation/Foundation.h>
 #import "SpriteKit/SpriteKit.h"
 
@@ -38,6 +41,7 @@
 @property (nonatomic) int numEnemyCaptures;
 @property (nonatomic) bool GameOver;
 @property (nonatomic) bool PlayerIsWinner;
+@property (nonatomic) bool playerTurn;
 
 
 // returns the correct macro'ed value for a piece. if index out of range returns 255

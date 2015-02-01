@@ -119,13 +119,15 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 }
 
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol promote: (bool)promotePiece {
+    if (!self.GameOver){
+        [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces promote:promotePiece];
+        printf("Enemy Captures: ");for (NSNumber* piece in self.enemyCaptures) printf("%d ", [piece intValue]); printf("\n");
+        printf("Player Captures: ");for (NSNumber* piece in self.playerCaptures) printf("%d ", [piece intValue]); printf("\n");
+        printf("\n");
     
-    [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces promote:promotePiece];
-    printf("Enemy Captures: ");for (NSNumber* piece in self.enemyCaptures) printf("%d ", [piece intValue]); printf("\n");
-    printf("Player Captures: ");for (NSNumber* piece in self.playerCaptures) printf("%d ", [piece intValue]); printf("\n");
-    printf("\n");
-    
-    printf("\nMoving piece at <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
+        printf("\nMoving piece at <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
+        self.playerTurn = !self.playerTurn;
+    }
 }
 
 // returns all possible moves of a piece at a location in an NSArray of NSNumbers
@@ -137,6 +139,8 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     
     const int piece = [self pieceAtRowI:[row intValue] ColumnJ:[col intValue]];
     const int flippedPiece = piece < 0 ? -1 * piece : piece;
+    
+    if (piece < 0 == self.playerTurn) return nil;
     
     int iRow = piece < 0 ? 8-[row intValue] : [row intValue];
     int jCol = piece < 0 ? 8-[col intValue] : [col intValue];
@@ -742,22 +746,28 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 - (NSArray*) possibleDropsForPiece:(int)piece {
     if (piece < 0 && !self.GameOver){
         return [self possibleDropsForPiece:piece onBoard:_pieces forCaptures:self.enemyCaptures];
-    } else {
+    } else if (piece > 0 && !self.GameOver){
         return [self possibleDropsForPiece:piece onBoard:_pieces forCaptures:self.playerCaptures];
+    } else {
+        return nil;
     }
 }
 
 - (void) dropPiece:(int)piece forCaptures:(NSMutableArray*)caps toRowI:(NSNumber*)row colJ:(NSNumber*)col {
-    NSLog(@"Dropping piece %d to <%@,%@>\n", piece, row, col);
-    bool pieceInCaps = [caps containsObject:[NSNumber numberWithInt:piece]];
+    if (((self.playerTurn && piece > 0) || (!self.playerTurn && piece < 0)) && !_GameOver){
+        NSLog(@"Dropping piece %d to <%@,%@>\n", piece, row, col);
+        bool pieceInCaps = [caps containsObject:[NSNumber numberWithInt:piece]];
 
-    bool moveValid = [[self possibleDropsForPiece:piece] containsObject:@[row, col]];
+        bool moveValid = [[self possibleDropsForPiece:piece] containsObject:@[row, col]];
     
-    // if piece is in capture pile and the move is valid--> proceed with the drop
-    if (pieceInCaps * moveValid) {
-        printf("Move valid...");
-        [caps removeObject:[NSNumber numberWithInt:piece]];
-        _pieces[[row intValue]][[col intValue]] = piece;
+        // if piece is in capture pile and the move is valid--> proceed with the drop
+        if (pieceInCaps * moveValid) {
+            printf("Move valid...");
+            [caps removeObject:[NSNumber numberWithInt:piece]];
+            _pieces[[row intValue]][[col intValue]] = piece;
+        }
+        
+        self.playerTurn = !self.playerTurn;
     }
 }
 
@@ -794,6 +804,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
         
         self.GameOver = false;
         self.PlayerIsWinner = false;
+        self.playerTurn = true;
     }
     return self;
 }
