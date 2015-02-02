@@ -8,7 +8,7 @@ This is an iOS 8 version of an extremely popular Japanese 'variant' (it was crea
 - People wanting to create their own shogi game can use the board and pieces I created for their own game.
 
 #Plan
-- Get two player working
+- ~~Get two player working~~
 - Create static evaluation function (probably will need to create neural net)
 - Implement minimax with alpha-beta pruning
 
