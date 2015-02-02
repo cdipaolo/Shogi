@@ -18,6 +18,7 @@
 @property (nonatomic) bool possibleMovesShowing;
 @property (nonatomic) bool gameMenuShowing;
 @property (nonatomic) bool promotedPieceOptionShowing;
+@property (nonatomic) bool gameOverShowing;
 @property (nonatomic) NSMutableArray* selectedMove;
 @property (nonatomic) NSMutableArray* indices;
 @property (nonatomic) NSNumber* selectedDropPiece;
@@ -25,6 +26,8 @@
 -(void) updateBoard;
 -(void) showGameMenu;
 -(void) hideGameMenu;
+-(void) updateTurn;
+-(void) gameOver;
 -(void) showPromotionOptionForPiece:(int)piece;
 -(void) hidePromotionOptionPiece;
 -(void) showPossibleDropsForPiece: (SKNode*)piece;

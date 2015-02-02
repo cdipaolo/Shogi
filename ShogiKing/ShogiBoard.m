@@ -101,15 +101,16 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                     [self.enemyCaptures addObject:[NSNumber numberWithInt:-1*pieceInFinalLocation]];
                 }
                 
-            } else if (pieceInFinalLocation == KING || pieceInFinalLocation == -KING){ // if king is captured --> game over & set winner
-                self.PlayerIsWinner = piece < 0 ? false : true;
-                self.GameOver = true;
             } else if (piece > 0 && pieceInFinalLocation < 0){ // else add to ally capture pile
                 if (pieceInFinalLocation < -KING) {
                     [self.playerCaptures addObject:[NSNumber numberWithInt:-1*(pieceInFinalLocation+10)]];
                 } else {
                     [self.playerCaptures addObject:[NSNumber numberWithInt:-1*pieceInFinalLocation]];
                 }
+            }
+            if (pieceInFinalLocation == KING || pieceInFinalLocation == -KING){ // if king is captured --> game over & set winner
+                self.PlayerIsWinner = piece > 0;
+                self.GameOver = true;
             }
             
             b[finalRow][finalCol] = piece;

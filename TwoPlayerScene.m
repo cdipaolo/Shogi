@@ -16,6 +16,11 @@
 -(id) initWithSize:(CGSize)size {
     if ([super initWithSize:size]) {
         
+        SKShapeNode* bgColor = [SKShapeNode shapeNodeWithRectOfSize:self.size];
+        bgColor.fillColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        bgColor.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+        [self addChild:bgColor];
+        
         SKSpriteNode* bg = [SKSpriteNode spriteNodeWithImageNamed:@"gameSceneBlank"];
         bg.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
         bg.name = @"bg";
@@ -28,19 +33,11 @@
         boardArea.zPosition++;
         [self addChild:boardArea];
         
-        SKShapeNode* profilePlayer = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(self.frame.size.width * .095, self.frame.size.width * .0946)];
-        profilePlayer.name = @"PlayerProfilePic";
-        profilePlayer.position = CGPointMake(self.frame.size.width * .068, self.frame.size.height * .073);
-        profilePlayer.zPosition++;
-        profilePlayer.lineWidth = 0;
-        [self addChild:profilePlayer];
-        
-        SKShapeNode* profileEnemy = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(self.frame.size.width * .095, self.frame.size.width * .0946)];
-        profileEnemy.name = @"PlayerProfilePic";
-        profileEnemy.position = CGPointMake(self.frame.size.width * .933, self.frame.size.height * .9245);
-        profileEnemy.zPosition++;
-        profileEnemy.lineWidth = 0;
-        [self addChild:profileEnemy];
+        SKSpriteNode* turn = [SKSpriteNode spriteNodeWithImageNamed:@"YourTurnNode"];
+        turn.name = @"Turn";
+        turn.zPosition++;
+        turn.position = CGPointMake(self.size.width * .225, self.size.height * .0735);
+        [self addChild:turn];
         
         SKSpriteNode* mainMenuButton = [SKSpriteNode spriteNodeWithImageNamed:@"mainMenuButton"];
         mainMenuButton.name = @"MainMenuButton";
@@ -62,7 +59,7 @@
         allyDropArea.lineWidth = 0;
         [self addChild:allyDropArea];
         
-        //Shogi Board allocation from custom class
+        //Shogi Board allocation for board data representation
         self.board = [[ShogiBoard alloc] init];
         
         self.gridBoxWidth = (boardArea.frame.size.width + 12) / 9;
@@ -71,6 +68,7 @@
         self.possibleMovesShowing = false;
         self.gameMenuShowing = false;
         self.promotedPieceOptionShowing = false;
+        self.gameOverShowing = false;
         self.selectedDropPiece = nil;
         
         // update the board
@@ -101,7 +99,22 @@
             
         }
     }
+    
+    if (self.board.GameOver) [self gameOver];
+    
+    [self updateTurn];
     [self updateCaptures];
+}
+
+-(void) updateTurn {
+    SKNode* turn = [self childNodeWithName:@"Turn"];
+    if (self.board.playerTurn == true) {
+        turn.position = CGPointMake(self.size.width * .225, self.size.height * .0735);
+        turn.zRotation = 0;
+    } else {
+        turn.position = CGPointMake(self.size.width * .775, self.size.height * .924);
+        turn.zRotation = M_PI;
+    }
 }
 
 -(void) updateCaptures {
@@ -148,6 +161,20 @@
     }
 }
 
+-(void) gameOver {
+    SKSpriteNode* gameOverPopup = [SKSpriteNode spriteNodeWithImageNamed:@"GameOverPopup"];
+    gameOverPopup.position = CGPointMake(self.size.width/2, self.size.height/2);
+    gameOverPopup.name = @"GameOver";
+    gameOverPopup.zPosition += 10;
+    if (!self.board.PlayerIsWinner) {
+        gameOverPopup.zRotation = M_PI;
+    }
+    
+    [self addChild:gameOverPopup];
+    
+    self.gameOverShowing = true;
+}
+
 -(NSNumber*) pieceForDropNode:(SKNode*)node {
     SKNode* allyDropArea = [self childNodeWithName:@"AllyDropArea"];
     bool ally = node.parent.position.y == allyDropArea.position.y;
@@ -174,6 +201,7 @@
         int j = [[move objectAtIndex:1] intValue];
         SKSpriteNode* possibleMove = [SKSpriteNode spriteNodeWithImageNamed:@"possibleMove"];
         possibleMove.position = CGPointMake(-self.gridBoxWidth * (4-j), self.gridBoxWidth * (4-i));
+        possibleMove.zPosition++;
         possibleMove.name = @"move";
         
         [boardArea addChild:possibleMove];
@@ -189,6 +217,7 @@
         int j = [[move objectAtIndex:1] intValue];
         SKSpriteNode* possibleMove = [SKSpriteNode spriteNodeWithImageNamed:@"possibleMove"];
         possibleMove.position = CGPointMake(-self.gridBoxWidth * (4-j), self.gridBoxWidth * (4-i));
+        possibleMove.zPosition++;
         possibleMove.name = @"move";
         
         [boardArea addChild:possibleMove];
@@ -279,7 +308,15 @@
     UITouch* touch = [touches anyObject];
     SKNode* nodeTouched = [self nodeAtPoint: [touch previousLocationInNode:self] ];
     NSString* name = nodeTouched.name;
-    if (!([name isEqualToString:@"promotion"] || [name isEqualToString:@"noPromotion"]) && self.promotedPieceOptionShowing) {
+    if (self.gameOverShowing){
+        SKNode* gameOver = [self childNodeWithName:@"GameOver"];
+        SKNode* turn = [self childNodeWithName:@"Turn"];
+        [gameOver removeFromParent];
+        [turn removeFromParent];
+        
+        self.gameOverShowing = false;
+        
+    } else if (!([name isEqualToString:@"promotion"] || [name isEqualToString:@"noPromotion"]) && self.promotedPieceOptionShowing) {
         printf("IN THERE");
         // hide possible moves
         SKNode* grid = [self childNodeWithName:@"BoardArea"];
