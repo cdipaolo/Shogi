@@ -745,9 +745,9 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 }
 
 - (NSArray*) possibleDropsForPiece:(int)piece {
-    if (piece < 0 && !self.GameOver){
+    if (piece < 0 && !self.GameOver && !self.playerTurn){
         return [self possibleDropsForPiece:piece onBoard:_pieces forCaptures:self.enemyCaptures];
-    } else if (piece > 0 && !self.GameOver){
+    } else if (piece > 0 && !self.GameOver && self.playerTurn){
         return [self possibleDropsForPiece:piece onBoard:_pieces forCaptures:self.playerCaptures];
     } else {
         return nil;
