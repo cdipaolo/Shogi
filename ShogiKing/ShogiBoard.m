@@ -122,11 +122,9 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol promote: (bool)promotePiece {
     if (!self.GameOver){
         [self movePieceAtRow:row column:col toRow:finalRow toColumn:finalCol onBoard:_pieces promote:promotePiece];
-        printf("Enemy Captures: ");for (NSNumber* piece in self.enemyCaptures) printf("%d ", [piece intValue]); printf("\n");
-        printf("Player Captures: ");for (NSNumber* piece in self.playerCaptures) printf("%d ", [piece intValue]); printf("\n");
-        printf("\n");
     
         printf("\nMoving piece at <%d,%d> to <%d,%d>\n", row, col, finalRow, finalCol);
+        printf("*Current Board Evaluation: %d", [self evaluate]);
         self.playerTurn = !self.playerTurn;
     }
 }
@@ -814,6 +812,260 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 -(id) init {
     return [self initWithArray: _defaultPieces];
 }
+
+- (NSNumber*) NSEvaluate {
+    return [[NSNumber alloc] initWithInt:[self evaluate]];
+}
+
+- (int) evaluate {
+    int total = 0;
+    total += 1 * [self check];
+    total += 1 * [self drops];
+    total += 1 * [self promotions];
+    total += 1 * [self pawns];
+    total += 1 * [self bishopMove];
+    total += 1 * [self rookMove];
+    total += 1 * [self kingProtect];
+    total += 1 * [self lanceMoves];
+    total += 1 * [self knightMoves];
+    
+    return total;
+}
+
+// check for check only (NOT mate)
+- (int) check {
+    int total = 0;
+    bool king = false;
+    bool negKing = false;
+    
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            
+            // if moves land on king, king is in check
+            if (piece == 0) continue;
+            else if (piece > 0 && !(king && negKing)){
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                for (NSArray* move in moves){
+                    int moveI = [[move objectAtIndex:0] intValue];
+                    int moveJ = [[move objectAtIndex:1] intValue];
+                    
+                    if ([self pieceAtRowI:moveI ColumnJ:moveJ] == -KING){
+                        total += 50;
+                        king = true;
+                    }
+                }
+            } else if (piece < 0 && !(king && negKing)){
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                for (NSArray* move in moves){
+                    int moveI = [[move objectAtIndex:0] intValue];
+                    int moveJ = [[move objectAtIndex:1] intValue];
+                    
+                    if ([self pieceAtRowI:moveI ColumnJ:moveJ] == KING){
+                        total -= 50;
+                        negKing = true;
+                    }
+                }
+            } else {
+                // both players are in check. No need to continue looking...
+                break;
+            }
+        }
+    }
+    
+    return total;
+}
+
+- (int) drops {
+    int total = 0;
+    total += (int) self.playerCaptures.count;
+    total -= (int) self.enemyCaptures.count;
+    
+    // check for bishops
+    if ([self.playerCaptures containsObject:[[NSNumber alloc] initWithInt:BISHOP]]) {total += 4;}
+    if ([self.enemyCaptures containsObject:[[NSNumber alloc] initWithInt:-BISHOP]]) {total -= 4;}
+    
+    // check for rooks
+    if ([self.playerCaptures containsObject:[[NSNumber alloc] initWithInt:ROOK]]) {total += 4;}
+    if ([self.enemyCaptures containsObject:[[NSNumber alloc] initWithInt:-ROOK]]) {total -= 4;}
+    
+    // check for lance
+    if ([self.playerCaptures containsObject:[[NSNumber alloc] initWithInt:LANCE]]) {total += 2;}
+    if ([self.enemyCaptures containsObject:[[NSNumber alloc] initWithInt:-LANCE]]) {total -= 2;}
+    
+    return total;
+}
+
+- (int) piecesOnBoard {
+    int total = 0;
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            if (piece == 0) continue;
+            else if (piece > 0) total += 1;
+            else total -= 1;
+        }
+    }
+    return total;
+}
+
+- (int) promotions {
+    int total = 0;
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            
+            if (piece > 10 && piece < 25) { total += 2;}
+            else if (piece < -10) { total -= 2;}
+        }
+    }
+    return total;
+}
+
+- (int) pawns {
+    int total = 0;
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            
+            if (piece == PAWN) { total += 1;}
+            else if (piece == -PAWN) { total -= 1;}
+        }
+    }
+    return total;
+}
+
+- (int) bishopMove {
+    int total = 0;
+    bool allyBishopFound = false;
+    bool enemyBishopFound = false;
+
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            if (piece == BISHOP && !(allyBishopFound && enemyBishopFound)){
+                allyBishopFound = true;
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                total += (int) moves.count;
+            } else if (piece == -BISHOP && !(allyBishopFound && enemyBishopFound)){
+                enemyBishopFound = true;
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                total -= (int) moves.count;
+            } else {break;}
+        }
+    }
+    
+    return total;
+}
+
+- (int) rookMove {
+    int total = 0;
+    bool allyRookFound = false;
+    bool enemyRookFound = false;
+    
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            if (piece == ROOK && !(allyRookFound && enemyRookFound)){
+                allyRookFound = true;
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                total += (int) moves.count;
+            } else if (piece == -ROOK && !(allyRookFound && enemyRookFound)){
+                enemyRookFound = true;
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                total -= (int) moves.count;
+            } else {break;}
+        }
+    }
+    
+    return total;
+}
+
+- (int) kingProtect {
+    int total = 0;
+    bool oshoFound = false;
+    bool gyoFound = false;
+    
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            if (piece == KING && !(oshoFound && gyoFound)){
+                oshoFound = true;
+                // see how many pieces are within 2 squares of king
+                int ki = i > 2 ? i - 2 : 0;
+                int maxI = ki + 5;
+                int kj = j - 2;
+                int maxJ = kj + 5;
+                for (ki; ki < maxI; ++ki){
+                    for (kj; kj < maxJ; ++kj){
+                        int piece = [self pieceAtRowI:ki ColumnJ:kj];
+                        if (piece > 0 && piece < 25) total += 1;
+                        else if (piece < 0) total -= 5;
+                    }
+                }
+                
+            } else if (piece == -KING && !(oshoFound && gyoFound)){
+                gyoFound = true;
+                // see how many pieces are within 2 squares of king
+                int ki = i > 2 ? i - 2 : 0;
+                int maxI = ki + 5;
+                int kj = j - 2;
+                int maxJ = kj + 5;
+                for (ki; ki < maxI; ++ki){
+                    for (kj; kj < maxJ; ++kj){
+                        int piece = [self pieceAtRowI:ki ColumnJ:kj];
+                        if (piece < 0) total -= 1;
+                        else if (piece > 0 && piece < 25) total += 5;
+                    }
+                }
+            } else {break;}
+        }
+    }
+    
+    if (!oshoFound) total -= 100;
+    if (!gyoFound) total += 100;
+    
+    return total;
+}
+
+- (int) lanceMoves {
+    int total = 0;
+    
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            if (piece == LANCE){
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                total += (int) moves.count;
+            } else if (piece == -LANCE){
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                total -= (int) moves.count;
+            } else {break;}
+        }
+    }
+    
+    return total;
+}
+
+- (int) knightMoves {
+    int total = 0;
+    
+    for (int i=0; i<9; ++i){
+        for (int j=0; j<9; ++j){
+            int piece = [self pieceAtRowI:i ColumnJ:j];
+            if (piece == KNIGHT){
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                total += (int) moves.count;
+            } else if (piece == -KNIGHT){
+                NSArray* moves = [self possibleMovesOfPieceAtRow:[[NSNumber alloc] initWithInt:i] column:[[NSNumber alloc] initWithInt:j]];
+                total -= (int) moves.count;
+            } else {break;}
+        }
+    }
+    
+    return total;
+}
+
 
 
 @end

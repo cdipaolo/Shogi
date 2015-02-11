@@ -44,20 +44,43 @@
 @property (nonatomic) bool playerTurn;
 
 
+// piece and board retrieval functions
 // returns the correct macro'ed value for a piece. if index out of range returns 255
 - (int) pieceAtRowI: (int) i ColumnJ: (int) j;
 - (int) pieceAtRowI:(int)i ColumnJ:(int)j forBoard: (int[9][9]) board;
 - (int**) returnBoard;
+
+// moves of pieces
 - (void) movePieceAtRow:(int)row column:(int)col toRow:(int)finalRow toColumn:(int)finalCol onBoard:(int[9][9])b promote:(bool)promotePiece;
 - (void) movePieceAtRow: (int)row column: (int)col toRow: (int)finalRow toColumn: (int) finalCol promote: (bool)promotePiece;
 - (NSArray*) possibleMovesOfPieceAtRow: (NSNumber*)row column: (NSNumber*) col;
+
+// possible drops and drop functions
 - (NSArray*) possibleDropsForPiece:(int)piece onBoard:(int[9][9])b forCaptures:(NSMutableArray*)caps;
 - (NSArray*) possibleDropsForPiece:(int)piece;
 - (void) dropPiece:(int)piece forCaptures:(NSMutableArray*)caps toRowI:(NSNumber*)row colJ:(NSNumber*)col;
 - (void) dropPiece:(int)piece toRowI:(NSNumber*)row colJ:(NSNumber*)col;
+
+// SpriteNode from piece number
 - (SKSpriteNode* ) nodeFromPiece:(int)piece;
+
+// init methods
 - (id) initWithArray: (int[9][9]) pieces;
 - (id) init;
 
+// static evaluation
+- (NSNumber*) NSEvaluate; // return evaluate as NSNumber
+- (int) evaluate; // sum all of static evaluation components
+- (int) check; // is king in check
+- (int) drops; // quality of drops
+- (int) piecesOnBoard; // total allied pieces on board
+- (int) promotions; // number & quality of promoted pieces
+- (int) pawns; // number of pawns
+- (int) bishopMove; // how many moves bishop can take
+- (int) rookMove; // how many moves rook can take
+- (int) kingProtect; // how many allied pieces are near king
+- (int) lanceMoves; // can lance move into promote area
+- (int) knightMoves; // can knight move? Can he capture?
+// add more factors?
 
 @end
