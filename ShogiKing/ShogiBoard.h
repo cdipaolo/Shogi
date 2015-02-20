@@ -37,11 +37,10 @@
 @property (nonatomic) NSDictionary* numberToLetter;
 @property (nonatomic) NSMutableArray* playerCaptures;
 @property (nonatomic) NSMutableArray* enemyCaptures;
-@property (nonatomic) int numPlayerCaptures;
-@property (nonatomic) int numEnemyCaptures;
 @property (nonatomic) bool GameOver;
 @property (nonatomic) bool PlayerIsWinner;
 @property (nonatomic) bool playerTurn;
+@property (nonatomic) int evaluation;
 
 
 // piece and board retrieval functions
@@ -68,6 +67,12 @@
 - (id) initWithArray: (int[9][9]) pieces;
 - (id) init;
 
+// copy board
+- (id) copyWithZone:(NSZone* ) zone;
+
+// match board with other board
+- (void) matchBoard: (ShogiBoard* ) board;
+
 // static evaluation
 - (NSNumber*) NSEvaluate; // return evaluate as NSNumber
 - (int) evaluate; // sum all of static evaluation components
@@ -82,5 +87,6 @@
 - (int) lanceMoves; // can lance move into promote area
 - (int) knightMoves; // can knight move? Can he capture?
 // add more factors?
+
 
 @end

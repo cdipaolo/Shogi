@@ -115,6 +115,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
             
             b[finalRow][finalCol] = piece;
             b[row][col] = EMPTY;
+            self.evaluation = [self evaluate];
         }
     }
 }
@@ -767,6 +768,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
         }
         
         self.playerTurn = !self.playerTurn;
+        self.evaluation = [self evaluate];
     }
 }
 
@@ -776,6 +778,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     } else {
         [self dropPiece:piece forCaptures:self.playerCaptures toRowI:row colJ:col];
     }
+    self.evaluation = [self evaluate];
 }
 
 
@@ -796,10 +799,8 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
         }
         
         self.playerCaptures = [[NSMutableArray alloc] init];
-        self.numPlayerCaptures = 0;
         
         self.enemyCaptures = [[NSMutableArray alloc] init];
-        self.numEnemyCaptures = 0;
         
         self.GameOver = false;
         self.PlayerIsWinner = false;
@@ -808,11 +809,40 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
     return self;
 }
 
+// matches a board to another board instance
+-(void) matchBoard:(ShogiBoard *)board {
+    int** newPieces = [board returnBoard];
+    for (int i=0 ; i < 9 ; ++i) {
+        for (int j=0 ; j < 9 ; ++j) {
+            _pieces[i][j] = newPieces[i][j];
+        }
+    }
+    self.PlayerIsWinner = board.PlayerIsWinner;
+    self.playerTurn = board.playerTurn;
+    self.evaluation = board.evaluation;
+    self.GameOver = board.GameOver;
+    self.playerCaptures = board.playerCaptures;
+    self.enemyCaptures = board.enemyCaptures;
+}
+
 // init Shogi Board with defualt starting pieces
 -(id) init {
     return [self initWithArray: _defaultPieces];
 }
 
+
+-(id) copyWithZone:(NSZone *) zone {
+    ShogiBoard *object = [[ShogiBoard alloc] init];
+    object.playerCaptures = [[self playerCaptures] copy];
+    object.enemyCaptures = [[self enemyCaptures] copy];
+    object.GameOver = self.GameOver;
+    object.PlayerIsWinner = self.PlayerIsWinner;
+    object.playerTurn = self.playerTurn;
+    
+    return object;
+}
+
+// evaluation functions
 - (NSNumber*) NSEvaluate {
     return [[NSNumber alloc] initWithInt:[self evaluate]];
 }
@@ -820,7 +850,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
 - (int) evaluate {
     int total = 0;
     total += 1 * [self check];
-    total += 1 * [self drops];
+    total += 2 * [self drops];
     total += 1 * [self promotions];
     total += 1 * [self pawns];
     total += 1 * [self bishopMove];
@@ -851,7 +881,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                     int moveJ = [[move objectAtIndex:1] intValue];
                     
                     if ([self pieceAtRowI:moveI ColumnJ:moveJ] == -KING){
-                        total += 50;
+                        total += 10;
                         king = true;
                     }
                 }
@@ -862,7 +892,7 @@ static int _pieces[9][9] = {{-LANCE,-KNIGHT,-SILVER,-GOLD,-KING,-GOLD,-SILVER,-K
                     int moveJ = [[move objectAtIndex:1] intValue];
                     
                     if ([self pieceAtRowI:moveI ColumnJ:moveJ] == KING){
-                        total -= 50;
+                        total -= 10;
                         negKing = true;
                     }
                 }
